@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Bukin::VERSION
   gem.authors       = ["Ryan Mendivil"]
   gem.email         = ["rsmendivil@gmail.com"]
-  gem.description   = %q{Plugin and server package manager for bukkit}
-  gem.summary       = %q{Plugin and server package manager for bukkit}
+  gem.description   = %q{Plugin and server package manager for Minecraft}
+  gem.summary       = gem.description
   gem.homepage      = "http://github.com/Nullreff/bukin"
 
   gem.files         = `git ls-files`.split($/)

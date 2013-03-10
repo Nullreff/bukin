@@ -1,3 +1,3 @@
 # Bukin
 
-Plugin and server package manager for bukkit.  
+Plugin and server package manager for Minecraft

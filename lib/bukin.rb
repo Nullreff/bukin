@@ -1,5 +1,5 @@
-require "bukin/version"
+require 'bukin/version'
+require 'bukin/cli'
 
 module Bukin
-  # Your code goes here...
 end
