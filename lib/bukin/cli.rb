@@ -34,7 +34,19 @@ class Bukin::CLI < Thor
                      :aliases => '-v',
                      :desc => "The version of the server to install"
     def server(name)
+        name = 'craftbukkit' if name == 'bukkit' # Auto rename
         name == 'craftbukkit' || abort("Currently only craftbukkit is supported as a sever")
+
+        if @lockfile.server != {} 
+            if @lockfile.server['name'] == name
+                abort("Server #{name} is already installed")
+            else
+                # Uninstall the existing server
+                file = @lockfile.server['file']
+                FileUtils.rm_f(file)
+            end
+        end
+
         version = options[:version]
         info_url = "#{BUKKIT_API}/projects/#{name}/view/#{version}/"
 
@@ -43,10 +55,11 @@ class Bukin::CLI < Thor
             info = JSON.parse(open(info_url).read)
             url = BUKKIT_BASE + info['file']['url']
             server_version = info['version']
+            server_build = info['build_number']
 
             shell.say "Downloading version #{server_version} of #{name}..."
             file_name = download_to(url, SERVER_PATH)
-            @lockfile.set_server(name, server_version, file_name)
+            @lockfile.set_server(name, "build-#{server_build}", file_name)
             shell.say "Saved to #{file_name}"
         rescue OpenURI::HTTPError => ex
             abort("Error: #{ex}")
