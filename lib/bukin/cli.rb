@@ -21,16 +21,22 @@ class Bukin::CLI < Thor
                      :aliases => '-s',
                      :desc => "The server type this plugin works with"
     def install(plugin)
-        url = "#{BASE}/plugins/#{options[:server]}/#{plugin}/#{options[:version]}/download"
+        version = options[:version]
+        server = options[:server]
+        url = "#{BASE}/plugins/#{server}/#{plugin}/#{version}/download"
 
-        open(url) do |download|
-            file_name = download.meta['content-disposition']
-                                .match(/filename=(\"?)(.+)\1/)[2]
+        begin
+            open(url) do |download|
+                file_name = download.meta['content-disposition']
+                                    .match(/filename=(\"?)(.+)\1/)[2]
 
-            FileUtils.mkdir_p(PLUGINS_PATH)
-            open("#{PLUGINS_PATH}/#{file_name}", "wb") do |file|
-                file.print download.read
+                FileUtils.mkdir_p(PLUGINS_PATH)
+                open("#{PLUGINS_PATH}/#{file_name}", "wb") do |file|
+                    file.print download.read
+                end
             end
+        rescue OpenURI::HTTPError => ex
+            abort "Error downloading version #{version} of #{plugin}\n#{ex}"
         end
     end
 
