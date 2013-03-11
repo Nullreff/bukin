@@ -101,8 +101,19 @@ private
     end
 
     def pretty_version(version)
-        if version == 'latest'
+        case version
+        when 'latest'
             "the latest version"
+        when 'latest-rb'
+            "the latest recommended build"
+        when 'latest-beta'
+            "the latest beta build"
+        when 'latest-dev'
+            "the latest development build"
+        when /^git-(.*)$/
+            "git commit #{$1}"
+        when /^build-(.*)$/
+            "build \##{$1}"
         else
            "version #{version}" 
         end
