@@ -3,6 +3,7 @@ require 'open-uri'
 require 'fileutils'
 require 'json'
 require 'bukin/lockfile'
+require 'bukin/installfile'
 
 # BukGet api
 # Docs: http://bukget.org/pages/docs/API3.html
@@ -66,7 +67,7 @@ class Bukin::CLI < Thor
         end
     end
 
-    desc 'install PLUGIN', "Download and install a plugin from bukkit dev"
+    desc 'install [PLUGIN]', "Download and install a plugin from bukkit dev"
     option :version, :type => :string,
                      :default => 'latest',
                      :aliases => '-v',
@@ -75,34 +76,41 @@ class Bukin::CLI < Thor
                      :default => 'bukkit',
                      :aliases => '-s',
                      :desc => "The server type this plugin works with"
-    def install(name)
-        if @lockfile.plugins.has_key?(name)
-            abort("The plugin #{name} is already installed")
-        end
+    def install(name = nil)
+        if name
+            if @lockfile.plugins.has_key?(name)
+                abort("The plugin #{name} is already installed")
+            end
 
-        version = options[:version]
-        display_version = pretty_version(version)
-        server = options[:server]
-        info_url = "#{BUKGET_API}/plugins/#{server}/#{name}/#{version}"
+            version = options[:version]
+            display_version = pretty_version(version)
+            server = options[:server]
+            info_url = "#{BUKGET_API}/plugins/#{server}/#{name}/#{version}"
 
-        begin
-            shell.say "Retriving the latest information about #{name}..."
-            info = JSON.parse(open(info_url).read)
-            url = info['versions'][0]['download']
-            plugin_version = info['versions'][0]['version']
+            begin
+                shell.say "Retriving the latest information about #{name}..."
+                info = JSON.parse(open(info_url).read)
+                url = info['versions'][0]['download']
+                plugin_version = info['versions'][0]['version']
 
-            shell.say "Downloading version #{plugin_version} of #{name}..."
-            file_name = download_to(url, PLUGINS_PATH)
-            @lockfile.add_plugin(name, plugin_version, file_name)
-            shell.say "Saved to #{file_name}"
-        rescue OpenURI::HTTPError => ex
-            abort("Error: #{ex}")
+                shell.say "Downloading version #{plugin_version} of #{name}..."
+                file_name = download_to(url, PLUGINS_PATH)
+                @lockfile.add_plugin(name, plugin_version, file_name)
+                shell.say "Saved to #{file_name}"
+            rescue OpenURI::HTTPError => ex
+                abort("Error: #{ex}")
+            end
+        else
+            contents = File.read(INSTALL_FILE)
+            installfile = Bukin::Installfile.new
+            installfile.instance_eval(contents)
+            shell.say installfile.to_yaml
         end
     end
 
     desc 'uninstall PLUGIN', "Uninstalls a plugin"
     def uninstall(name)
-        if not @lockfile.plugins.has_key?(name)
+        unless @lockfile.plugins.has_key?(name)
             abort("The plugin #{name} is not currently installed")
         end
 

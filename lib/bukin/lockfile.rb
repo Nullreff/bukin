@@ -1,8 +1,7 @@
 require 'yaml'
 require 'fileutils'
 
-INSTALL_FILE = "Bukfile"
-LOCK_FILE = "#{INSTALL_FILE}.lock"
+LOCK_FILE = 'Bukfile.lock'
 
 class Bukin::Lockfile
 
