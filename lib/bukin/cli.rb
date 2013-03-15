@@ -1,13 +1,9 @@
 require 'thor'
-require 'open-uri'
 require 'fileutils'
 require 'json'
 require 'bukin/lockfile'
 require 'bukin/installfile'
-
-# BukGet api
-# Docs: http://bukget.org/pages/docs/API3.html
-BUKGET_API = "http://api.bukget.org/3"
+require 'bukin/providers/bukget'
 
 # Bukkit download api
 # Docs: http://dl.bukkit.org/about/
@@ -26,6 +22,7 @@ class Bukin::CLI < Thor
 
     def initialize(*)
         @lockfile = Bukin::Lockfile.new
+        @bukget = Bukin::Bukget.new
         super
     end
 
@@ -83,19 +80,17 @@ class Bukin::CLI < Thor
             end
 
             version = options[:version]
-            display_version = pretty_version(version)
             server = options[:server]
-            info_url = "#{BUKGET_API}/plugins/#{server}/#{name}/#{version}"
 
             begin
                 shell.say "Retriving the latest information about #{name}..."
-                info = JSON.parse(open(info_url).read)
-                url = info['versions'][0]['download']
-                plugin_version = info['versions'][0]['version']
+                download_version = @bukget.resolve_version(name, version, server)
 
-                shell.say "Downloading version #{plugin_version} of #{name}..."
-                file_name = download_to(url, PLUGINS_PATH)
-                @lockfile.add_plugin(name, plugin_version, file_name)
+                shell.say "Downloading version #{download_version} of #{name}..."
+                data, file_name = @bukget.download(name, download_version, server)
+                save_download(data, file_name, PLUGINS_PATH)
+                @lockfile.add_plugin(name, download_version, file_name)
+
                 shell.say "Saved to #{file_name}"
             rescue OpenURI::HTTPError => ex
                 abort("Error: #{ex}")
@@ -125,44 +120,5 @@ class Bukin::CLI < Thor
         shell.say "Bukin is a plugin and server package manager for Minecraft."
         shell.say
         super
-    end
-
-private
-
-    def download_to(url, path, content_disposition = false)
-        open(url) do |download|
-            file_name = if content_disposition
-                            download.meta['content-disposition']
-                                    .match(/filename=(\"?)(.+)\1/)[2]
-                        else
-                            File.basename(url)
-                        end
-
-            FileUtils.mkdir_p(path)
-            open("#{path}/#{file_name}", "wb") do |file|
-                file.print download.read
-            end
-
-            file_name
-        end
-    end
-
-    def pretty_version(version)
-        case version
-        when 'latest'
-            "the latest version"
-        when 'latest-rb'
-            "the latest recommended build"
-        when 'latest-beta'
-            "the latest beta build"
-        when 'latest-dev'
-            "the latest development build"
-        when /^git-(.*)$/
-            "git commit #{$1}"
-        when /^build-(.*)$/
-            "build \##{$1}"
-        else
-           "version #{version}"
-        end
     end
 end
