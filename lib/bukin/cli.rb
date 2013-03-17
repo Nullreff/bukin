@@ -4,13 +4,7 @@ require 'json'
 require 'bukin/lockfile'
 require 'bukin/installfile'
 require 'bukin/providers/bukget'
-
-# Bukkit download api
-# Docs: http://dl.bukkit.org/about/
-BUKKIT_API = "http://dl.bukkit.org/api/1.0/downloads"
-
-# Base url used for bukkit downloads
-BUKKIT_BASE = "http://dl.bukkit.org"
+require 'bukin/providers/bukkit_dl'
 
 # Path to install plugins to
 PLUGINS_PATH = "plugins"
@@ -23,6 +17,7 @@ class Bukin::CLI < Thor
     def initialize(*)
         @lockfile = Bukin::Lockfile.new
         @bukget = Bukin::Bukget.new
+        @bukkit_dl = Bukin::BukkitDl.new
         super
     end
 
@@ -46,18 +41,17 @@ class Bukin::CLI < Thor
         end
 
         version = options[:version]
-        info_url = "#{BUKKIT_API}/projects/#{name}/view/#{version}/"
 
         begin
             shell.say "Retriving the latest information about #{name}..."
-            info = JSON.parse(open(info_url).read)
-            url = BUKKIT_BASE + info['file']['url']
-            server_version = info['version']
-            server_build = info['build_number']
+            download_version = @bukkit_dl.resolve_version(name, version)
+            download_build = @bukkit_dl.resolve_build(name, version)
 
-            shell.say "Downloading version #{server_version} of #{name}..."
-            file_name = download_to(url, SERVER_PATH)
-            @lockfile.set_server(name, "build-#{server_build}", file_name)
+            shell.say "Downloading version #{download_version} of #{name}..."
+            data, file_name = @bukkit_dl.download(name, download_build)
+            save_download(data, file_name, SERVER_PATH)
+            @lockfile.set_server(name, download_build, file_name)
+
             shell.say "Saved to #{file_name}"
         rescue OpenURI::HTTPError => ex
             abort("Error: #{ex}")

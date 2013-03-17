@@ -12,12 +12,13 @@ def download_file(url, content_disposition = false)
         file_name = if content_disposition
                         download.meta['content-disposition']
                                 .match(/filename=(\"?)(.+)\1/)[2]
+                                .force_encoding("UTF-8")
                     else
                         File.basename(url)
                     end
         data = download.read
+        return data, file_name
     end
-    return data, file_name
 end
 
 def pretty_version(version)

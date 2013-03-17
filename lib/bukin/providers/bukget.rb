@@ -13,7 +13,7 @@ class Bukin::Bukget
 
     def download(name, version, server)
         url = "#{@api_url}/plugins/#{server}/#{name}/#{version}/download"
-        download_resource(url, true)
+        download_file(url, true)
     end
 
     def info(name, version, server)

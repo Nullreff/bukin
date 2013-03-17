@@ -29,6 +29,7 @@ class Bukin::Lockfile
             'version' => version,
             'files' => files
         }
+        save
     end
 
     def remove_plugin(name)
@@ -38,11 +39,6 @@ class Bukin::Lockfile
 
     def plugins
         @lockfile['plugins']
-    end
-
-    def plugins=(value)
-        @lockfile['plugins'] = value
-        save
     end
 
     def server
