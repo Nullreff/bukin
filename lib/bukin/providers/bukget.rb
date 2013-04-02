@@ -12,11 +12,13 @@ class Bukin::Bukget
     end
 
     def download(name, version, server)
+        server = 'bukkit' if server == 'craftbukkit'
         url = "#{@api_url}/plugins/#{server}/#{name}/#{version}/download"
         download_file(url, true)
     end
 
     def info(name, version, server)
+        server = 'bukkit' if server == 'craftbukkit'
         url = "#{@api_url}/plugins/#{server}/#{name}/#{version}"
         JSON.parse(open(url).read)
     end

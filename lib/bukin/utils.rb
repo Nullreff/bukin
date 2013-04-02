@@ -21,6 +21,17 @@ def download_file(url, content_disposition = false)
     end
 end
 
+
+def install_plugin(name, version, server)
+    return false if @lockfile.plugins.has_key?(name)
+
+    download_version = @bukget.resolve_version(name, version, server)
+    data, file_name = @bukget.download(name, download_version, server)
+    save_download(data, file_name, PLUGINS_PATH)
+    @lockfile.add_plugin(name, download_version, file_name)
+    return file_name, download_version
+end
+
 def pretty_version(version)
     case version
     when 'latest'
