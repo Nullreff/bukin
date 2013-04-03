@@ -21,7 +21,6 @@ def download_file(url, content_disposition = false)
     end
 end
 
-
 def install_plugin(name, version, server)
     return false if @lockfile.plugins.has_key?(name)
 
@@ -49,4 +48,13 @@ def pretty_version(version)
     else
        "version #{version}"
     end
+end
+
+def section(message)
+    say "#{message}... "
+    yield
+    say 'Done', :green
+rescue Exception => ex
+    say('Error', :red)
+    raise ex
 end
