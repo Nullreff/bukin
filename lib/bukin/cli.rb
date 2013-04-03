@@ -1,19 +1,13 @@
 require 'thor'
-require 'bukin/lockfile'
+require 'bukin/installer'
 require 'bukin/bukfile'
 require 'bukin/providers/bukget'
 require 'bukin/providers/bukkit_dl'
 
-# Path to install plugins to
-PLUGINS_PATH = "plugins"
-
-# Path to install the server in
-SERVER_PATH = "."
-
 class Bukin::CLI < Thor
 
   def initialize(*)
-    @lockfile = Bukin::Lockfile.new
+    @installer = Bukin::Installer.new(Dir.pwd, true)
     @bukget = Bukin::Bukget.new
     @bukkit_dl = Bukin::BukkitDl.new
     super
@@ -39,16 +33,12 @@ class Bukin::CLI < Thor
     end
 
     section "Downloading #{server[:name]} (#{server[:download_version]})" do
-      data, file_name = @bukkit_dl.download(server[:name], server[:download_build])
-      save_download(data, file_name, SERVER_PATH)
-      @lockfile.set_server(server[:name], server[:download_build], file_name)
+      @installer.install(:server, @bukkit_dl, server[:name], server[:download_build])
     end
 
     plugins.each do |plugin|
       section "Downloading #{plugin[:name]} (#{plugin[:download_version]})" do
-        data, file_name = @bukget.download(plugin[:name], plugin[:download_version], server[:name])
-        save_download(data, file_name, PLUGINS_PATH)
-        @lockfile.add_plugin(plugin[:name], plugin[:download_version], file_name)
+        @installer.install(:plugin, @bukget, plugin[:name], plugin[:download_version], server[:name])
       end
     end
   end

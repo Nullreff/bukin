@@ -31,6 +31,17 @@ class Bukin::Lockfile
     save
   end
 
+  def add(type, *args)
+    case type
+    when :server
+      set_server(*args)
+    when :plugin
+      add_plugin(*args)
+    else
+      raise(ArgumentError, "You must specify :server or :plugin as the type when adding to a lock file")
+    end
+  end
+
   def remove_plugin(name)
     plugins.delete(name)
     save
