@@ -1,6 +1,4 @@
 require 'thor'
-require 'fileutils'
-require 'json'
 require 'bukin/lockfile'
 require 'bukin/bukfile'
 require 'bukin/providers/bukget'

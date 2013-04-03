@@ -1,4 +1,5 @@
 require 'bukin/utils'
+require 'json'
 
 # Base url used for bukkit downloads
 BUKKIT_DL_BASE = "http://dl.bukkit.org"

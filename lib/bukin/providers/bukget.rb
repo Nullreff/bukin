@@ -1,4 +1,5 @@
 require 'bukin/utils'
+require 'json'
 
 # BukGet api
 # Docs: http://bukget.org/pages/docs/API3.html

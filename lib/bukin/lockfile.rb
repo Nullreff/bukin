@@ -1,5 +1,4 @@
 require 'yaml'
-require 'fileutils'
 
 LOCK_FILE = 'Bukfile.lock'
 
