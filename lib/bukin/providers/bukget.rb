@@ -3,13 +3,11 @@ require 'json'
 
 # BukGet api
 # Docs: http://bukget.org/pages/docs/API3.html
-BUKGET_API = "http://api.bukget.org/3"
-
 class Bukin::Bukget
-  attr_accessor :api_url
+  attr_reader :api_url
 
-  def initialize(url = BUKGET_API)
-    @api_url = url
+  def initialize(url = 'http://api.bukget.org')
+    @api_url = "#{url}/3"
   end
 
   def download(name, version, server)

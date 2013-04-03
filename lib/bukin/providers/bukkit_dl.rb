@@ -1,23 +1,18 @@
 require 'bukin/utils'
 require 'json'
 
-# Base url used for bukkit downloads
-BUKKIT_DL_BASE = "http://dl.bukkit.org"
-
 # Bukkit download api
 # Docs: http://dl.bukkit.org/about/
-BUKKIT_DL_API = "#{BUKKIT_DL_BASE}/api/1.0/downloads"
-
-
 class Bukin::BukkitDl
-  attr_accessor :api_url
+  attr_reader :api_url, :download_url
 
-  def initialize(url = BUKKIT_DL_API)
-    @api_url = url
+  def initialize(url = 'http://dl.bukkit.org')
+    @api_url = "#{url}/api/1.0/downloads"
+    @download_url = url
   end
 
   def download(name, version)
-    url = BUKKIT_DL_BASE + info(name, version)['file']['url']
+    url = @download_url + info(name, version)['file']['url']
     download_file(url)
   end
 
