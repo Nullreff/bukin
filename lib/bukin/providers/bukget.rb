@@ -21,8 +21,4 @@ class Bukin::Bukget
     url = "#{@api_url}/plugins/#{server}/#{name}/#{version}"
     JSON.parse(open(url).read)
   end
-
-  def resolve_version(name, version, server)
-    info(name, version, server)['versions'][0]['version']
-  end
 end

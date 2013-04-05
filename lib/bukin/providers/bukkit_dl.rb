@@ -20,12 +20,4 @@ class Bukin::BukkitDl
     url = "#{@api_url}/projects/#{name}/view/#{version}/"
     JSON.parse(open(url).read)
   end
-
-  def resolve_build(name, version)
-    "build-#{info(name, version)['build_number']}"
-  end
-
-  def resolve_version(name, version)
-    info(name, version)['version']
-  end
 end
