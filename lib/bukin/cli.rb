@@ -1,4 +1,5 @@
 require 'thor'
+require 'socket'
 require 'bukin/installer'
 require 'bukin/bukfile'
 require 'bukin/providers/bukget'
@@ -52,13 +53,19 @@ class Bukin::CLI < Thor
     super
   end
 
-  private
+private
   def section(message)
     say "#{message}... "
     yield
     say 'Done', :green
-  rescue Exception => ex
-    say('Error', :red)
-    raise ex
+  rescue => ex
+    if ex.class == SocketError
+      say 'Connection Error', :red
+      say ex.message
+      abort 'Check that you have a stable connection and the service is online'
+    else
+      say 'Error', :red
+      raise ex
+    end
   end
 end
