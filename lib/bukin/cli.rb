@@ -10,9 +10,11 @@ class Bukin::CLI < Thor
   desc 'install', "Download and install the resources specified in a Bukfile"
   def install
     # Parse in the Bukfile
-    contents = File.read(Bukin::Bukfile::NAME)
     bukfile = Bukin::Bukfile.new
-    bukfile.instance_eval(contents)
+    section 'Parsing Bukfile' do
+      contents = File.read(Bukin::Bukfile::NAME)
+      bukfile.instance_eval(contents)
+    end
     server = bukfile.server_info
     plugins = bukfile.plugins_info
 
