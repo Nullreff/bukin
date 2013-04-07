@@ -62,13 +62,6 @@ private
     say 'Done', :green
   rescue => ex
     say 'Error', :red
-    if ex.class == SocketError
-      say ex.message
-      abort 'Check that you have a stable connection and the service is online'
-    elsif ex.class == Errno::ENOENT
-      abort ex.message
-    else
-      raise ex
-    end
+    raise ex
   end
 end
