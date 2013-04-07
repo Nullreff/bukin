@@ -61,12 +61,13 @@ private
     yield
     say 'Done', :green
   rescue => ex
+    say 'Error', :red
     if ex.class == SocketError
-      say 'Connection Error', :red
       say ex.message
       abort 'Check that you have a stable connection and the service is online'
+    elsif ex.class == Errno::ENOENT
+      abort ex.message
     else
-      say 'Error', :red
       raise ex
     end
   end
