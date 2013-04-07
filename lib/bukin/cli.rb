@@ -25,7 +25,7 @@ class Bukin::CLI < Thor
     section "Fetching information from #{bukkit_dl.api_url}" do
       info = bukkit_dl.info(server[:name], server[:version])
       server[:download_version] = info['version']
-      server[:download_build] = info['build_number']
+      server[:download_build] = "build-#{info['build_number']}"
     end
 
     section "Fetching information from #{bukget.api_url}" do
