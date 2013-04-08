@@ -4,15 +4,4 @@ $LOAD_PATH.unshift(File.expand_path('../lib', File.dirname(__FILE__)))
 
 require 'bukin'
 
-begin
-  Bukin::CLI.start
-rescue => ex
-  if ex.class == SocketError
-    say ex.message
-    abort 'Check that you have a stable connection and the service is online'
-  elsif ex.class == Errno::ENOENT
-    abort ex.message
-  else
-    raise ex
-  end
-end
+Bukin::with_friendly_errors { Bukin::CLI.start }

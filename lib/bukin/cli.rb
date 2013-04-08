@@ -1,5 +1,4 @@
 require 'thor'
-require 'socket'
 require 'bukin/installer'
 require 'bukin/bukfile'
 require 'bukin/providers/bukget'
