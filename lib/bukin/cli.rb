@@ -20,13 +20,13 @@ class Bukin::CLI < Thor
     bukkit_dl = Bukin::BukkitDl.new
     bukget = Bukin::Bukget.new
 
-    section "Fetching information from #{bukkit_dl.api_url}" do
+    section "Fetching information from #{bukkit_dl.url}" do
       info = bukkit_dl.info(server[:name], server[:version])
       server[:download_version] = info['version']
       server[:download_build] = "build-#{info['build_number']}"
     end
 
-    section "Fetching information from #{bukget.api_url}" do
+    section "Fetching information from #{bukget.url}" do
       plugins.each do |plugin|
         info = bukget.info(plugin[:name], plugin[:version], server[:name])
         plugin[:download_version] = info['versions'][0]['version']
