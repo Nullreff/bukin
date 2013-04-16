@@ -9,11 +9,10 @@ class Bukin::CLI < Thor
   desc 'install', "Download and install the resources specified in a Bukfile"
   def install
     # Parse in the Bukfile
-    bukfile = Bukin::Bukfile.new
-    section 'Parsing Bukfile' do
-      contents = File.read(Bukin::Bukfile::NAME)
-      bukfile.instance_eval(contents)
+    bukfile = section 'Parsing Bukfile' do
+      Bukin::Bukfile.from_file
     end
+
     server = bukfile.server_info
     plugins = bukfile.plugins_info
 
@@ -57,8 +56,9 @@ class Bukin::CLI < Thor
 private
   def section(message)
     say "#{message}... "
-    yield
+    value = yield
     say 'Done', :green
+    value
   rescue => ex
     say 'Error', :red
     raise ex
