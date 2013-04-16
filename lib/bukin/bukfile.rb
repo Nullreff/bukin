@@ -26,7 +26,7 @@ class Bukin::Bukfile
     unless @server_info
       @server_info = { name: name, version: version }
     else
-      abort("Error: There is more than one server declared in your #{INSTALL_FILE}")
+      abort("Error: There is more than one server declared in your #{FILE_NAME}")
     end
   end
 
