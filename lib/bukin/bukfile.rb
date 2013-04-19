@@ -22,15 +22,25 @@ class Bukin::Bukfile
     @plugins_info = []
   end
 
-  def server(name, version = 'latest-rb')
-    unless @server_info
-      @server_info = { name: name, version: version }
-    else
+  def server(name, *args)
+    if @server_info
       abort("Error: There is more than one server declared in your #{FILE_NAME}")
     end
+
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    version = args.any? ? args.pop : 'latest-rb'
+
+    @server_info = { name: name, version: version, options: options }
   end
 
-  def plugin(name, version = 'latest')
-    @plugins_info << { name: name, version: version }
+  def plugin(name, *args)
+    if @plugins_info.find { |p| p[:name] == name }
+      abort("Error: You declared the plugin #{name} more than once in your #{FILE_NAME}")
+    end
+
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    version = args.any? ? args.pop : 'latest'
+
+    @plugins_info << { name: name, version: version, options: options }
   end
 end
