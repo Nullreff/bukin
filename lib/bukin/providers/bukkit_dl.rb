@@ -14,17 +14,18 @@ class Bukin::BukkitDl
     "#{url}/api/1.0/downloads"
   end
 
-  def download_url
-    url
-  end
+  def resolve_info(data)
+    return if data[:download]
 
-  def download(name, version)
-    url = download_url + info(name, version)['file']['url']
-    download_file(url)
-  end
+    name = data[:name]
+    version = data[:version]
 
-  def info(name, version)
     url = "#{api_url}/projects/#{name}/view/#{version}/"
-    JSON.parse(open(url).read)
+    info = JSON.parse(open(url).read)
+
+    data[:version] = "build-#{info['build_number']}"
+    data[:display_version] = info['version']
+    data[:download] = @url + info['file']['url']
+    data
   end
 end

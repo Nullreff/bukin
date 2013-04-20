@@ -30,7 +30,7 @@ class Bukin::Bukfile
     options = args.last.is_a?(Hash) ? args.pop : {}
     version = args.any? ? args.pop : 'latest-rb'
 
-    @server_info = { name: name, version: version, options: options }
+    @server_info = { name: name, version: version }.merge(options)
   end
 
   def plugin(name, *args)
@@ -41,6 +41,6 @@ class Bukin::Bukfile
     options = args.last.is_a?(Hash) ? args.pop : {}
     version = args.any? ? args.pop : 'latest'
 
-    @plugins_info << { name: name, version: version, options: options }
+    @plugins_info << { name: name, version: version }.merge(options)
   end
 end

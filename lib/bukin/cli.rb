@@ -21,28 +21,26 @@ class Bukin::CLI < Thor
     bukget = Bukin::Bukget.new
 
     section "Fetching information from #{bukkit_dl.url}" do
-      info = bukkit_dl.info(server[:name], server[:version])
-      server[:download_version] = info['version']
-      server[:download_build] = "build-#{info['build_number']}"
+      bukkit_dl.resolve_info(server)
     end
 
     section "Fetching information from #{bukget.url}" do
-      plugins.each do |plugin|
-        info = bukget.info(plugin[:name], plugin[:version], server[:name])
-        plugin[:download_version] = info['versions'][0]['version']
+      plugins.map do |plugin|
+        plugin[:server] ||= server[:name]
+        bukget.resolve_info(plugin)
       end
     end
 
     # Download and install server and plugins
     installer = Bukin::Installer.new(Dir.pwd, true)
 
-    section "Downloading #{server[:name]} (#{server[:download_version]})" do
-      installer.install(:server, bukkit_dl, server[:name], server[:download_build])
+    section "Downloading #{server[:name]} (#{server[:display_version]})" do
+      installer.install(:server, bukkit_dl, server)
     end
 
     plugins.each do |plugin|
-      section "Downloading #{plugin[:name]} (#{plugin[:download_version]})" do
-        installer.install(:plugin, bukget, plugin[:name], plugin[:download_version], server[:name])
+      section "Downloading #{plugin[:name]} (#{plugin[:version]})" do
+        installer.install(:plugin, bukget, plugin)
       end
     end
   end

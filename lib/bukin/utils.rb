@@ -9,7 +9,7 @@ end
 
 def download_file(url, content_disposition = false)
   open(url) do |download|
-    file_name = if content_disposition
+    file_name = if download.meta['content-disposition']
                   download.meta['content-disposition']
                           .match(/filename=(\"?)(.+)\1/)[2]
                           .force_encoding("UTF-8")

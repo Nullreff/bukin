@@ -14,15 +14,19 @@ class Bukin::Bukget
     "#{url}/3"
   end
 
-  def download(name, version, server)
-    server = 'bukkit' if server == 'craftbukkit'
-    url = "#{api_url}/plugins/#{server}/#{name}/#{version}/download"
-    download_file(url, true)
-  end
+  def resolve_info(data)
+    return if data[:download]
 
-  def info(name, version, server)
+    name = data[:name]
+    version = data[:version]
+    server = data[:server]
     server = 'bukkit' if server == 'craftbukkit'
+
     url = "#{api_url}/plugins/#{server}/#{name}/#{version}"
-    JSON.parse(open(url).read)
+    info = JSON.parse(open(url).read)
+
+    data[:version] = info['versions'][0]['version']
+    data[:download] = "#{api_url}/plugins/#{server}/#{name}/#{version}/download"
+    data
   end
 end

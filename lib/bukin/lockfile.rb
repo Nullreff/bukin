@@ -15,28 +15,28 @@ class Bukin::Lockfile
     end
   end
 
-  def set_server(name, version, file)
+  def set_server(data)
     self.server = {
-      'name' => name,
-      'version' => version,
-      'file' => file
+      'name' => data[:name],
+      'version' => data[:version],
+      'file' => data[:file]
     }
   end
 
-  def add_plugin(name, version, *files)
-    self.plugins[name] = {
-      'version' => version,
-      'files' => files
+  def add_plugin(data)
+    self.plugins[data[:name]] = {
+      'version' => data[:version],
+      'files' => data[:files] || [data[:file]]
     }
     save
   end
 
-  def add(type, *args)
+  def add(type, data)
     case type
     when :server
-      set_server(*args)
+      set_server(data)
     when :plugin
-      add_plugin(*args)
+      add_plugin(data)
     else
       raise(ArgumentError, "You must specify :server or :plugin as the type when adding to a lock file")
     end

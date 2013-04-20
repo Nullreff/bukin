@@ -9,14 +9,15 @@ class Bukin::Installer
     @paths = { server: path, plugin: "#{path}/plugins" }
   end
 
-  def install(type, provider, *args)
+  def install(type, provider, data)
     unless @paths.keys.include?(type)
       raise(ArgumentError, "You must specify one of the following types to install: #{@paths.keys.to_s}")
     end
-    data, file_name = provider.download(*args)
-    save_download(data, file_name, @paths[type])
+    file_data, file_name = download_file(data[:download])
+    save_download(file_data, file_name, @paths[type])
     if @lockfile
-      @lockfile.add(type, args[0], args[1], file_name)
+      data[:file] = file_name
+      @lockfile.add(type, data)
     end
   end
 end
