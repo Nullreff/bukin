@@ -15,10 +15,12 @@ class Bukin::Bukget
   end
 
   def resolve_info(data)
-    return if data[:download]
+    if data[:download]
+      return data
+    end
 
     name = data[:name]
-    version = data[:version]
+    version = data[:version] || 'latest'
     server = data[:server]
     server = 'bukkit' if server == 'craftbukkit'
 

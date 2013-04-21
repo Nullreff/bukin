@@ -34,12 +34,12 @@ class Bukin::CLI < Thor
     # Download and install server and plugins
     installer = Bukin::Installer.new(Dir.pwd, true)
 
-    section "Downloading #{server[:name]} (#{server[:display_version]})" do
+    downloading server[:name], server[:display_version] do
       installer.install(:server, bukkit_dl, server)
     end
 
     plugins.each do |plugin|
-      section "Downloading #{plugin[:name]} (#{plugin[:version]})" do
+      downloading plugin[:name], plugin[:version] do
         installer.install(:plugin, bukget, plugin)
       end
     end
@@ -60,5 +60,11 @@ private
   rescue => ex
     say 'Error', :red
     raise ex
+  end
+
+  def downloading(name, version, &block)
+    msg = "Downloading #{name}"
+    msg << " (#{version})" if version
+    section(msg, &block)
   end
 end

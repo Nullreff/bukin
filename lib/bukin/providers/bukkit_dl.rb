@@ -15,10 +15,13 @@ class Bukin::BukkitDl
   end
 
   def resolve_info(data)
-    return if data[:download]
+    if data[:download]
+      data[:display_version] = data[:version]
+      return data
+    end
 
     name = data[:name]
-    version = data[:version]
+    version = data[:version] || 'latest-rb'
 
     url = "#{api_url}/projects/#{name}/view/#{version}/"
     info = JSON.parse(open(url).read)

@@ -28,7 +28,7 @@ class Bukin::Bukfile
     end
 
     options = args.last.is_a?(Hash) ? args.pop : {}
-    version = args.any? ? args.pop : 'latest-rb'
+    version = args.pop || nil
 
     @server_info = { name: name, version: version }.merge(options)
   end
@@ -39,7 +39,7 @@ class Bukin::Bukfile
     end
 
     options = args.last.is_a?(Hash) ? args.pop : {}
-    version = args.any? ? args.pop : 'latest'
+    version = args.pop || nil
 
     @plugins_info << { name: name, version: version }.merge(options)
   end
