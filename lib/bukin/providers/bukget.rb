@@ -36,7 +36,6 @@ class Bukin::Bukget
       data[:version] = version_data['version']
       data[:download] = version_data['download']
     else
-      puts info
       raise Bukin::InstallError, "The plugin #{name} (#{version}) has no jar files available for download"
     end
 
