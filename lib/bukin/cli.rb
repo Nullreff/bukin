@@ -27,7 +27,11 @@ class Bukin::CLI < Thor
     section "Fetching information from #{bukget.url}" do
       plugins.map do |plugin|
         plugin[:server] ||= server[:name]
-        bukget.resolve_info(plugin)
+        begin
+          bukget.resolve_info(plugin)
+        rescue OpenURI::HTTPError => ex
+          raise Bukin::BukinError, "There was an error downloading #{plugin[:name]} (#{plugin[:version]}).\n#{ex.message}"
+        end
       end
     end
 
