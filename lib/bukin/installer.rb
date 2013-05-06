@@ -17,7 +17,8 @@ class Bukin::Installer
 
     file_data, file_name = download_file(data[:download])
     if File.extname(file_name) == '.zip'
-      file_names = extract_files(file_data, @paths[type], /\.jar$/)
+      match = data[:extract] || /\.jar$/
+      file_names = extract_files(file_data, @paths[type], match)
       if file_names.empty?
         raise(Bukin::InstallError, "The plugin #{data[:name]} (#{data[:version]}) has no jar files in it's download (zip file).")
       end
