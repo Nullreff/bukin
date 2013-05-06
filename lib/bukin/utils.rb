@@ -1,3 +1,4 @@
+require 'bukin/version'
 require 'open-uri'
 
 def save_download(data, name, path)
@@ -8,7 +9,7 @@ def save_download(data, name, path)
 end
 
 def download_file(url, content_disposition = false)
-  open(url) do |download|
+  open(url, "User-Agent" => "Bukin #{Bukin::VERSION}") do |download|
     file_name = if download.meta['content-disposition']
                   download.meta['content-disposition']
                           .match(/filename=(\"?)(.+)\1/)[2]
