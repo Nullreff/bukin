@@ -38,7 +38,7 @@ By default, bukin will try to download jar files from bukkit dev.  If only zip f
 
     plugin 'permissionsex', '4.5', extract: /PermissionsEx.*\.jar/
 
-Plugins or servers can also be downloded from jenkins. Just specify the base url for jenkins and a [ruby regular expression](http://ruby-doc.org/core-1.9.3/Regexp.html) matching the file you want to download.
+Plugins or servers can also be downloaded from Jenkins. Just specify the base url for Jenkins and a [ruby regular expression](http://ruby-doc.org/core-1.9.3/Regexp.html) matching the file you want to download.
 
     server 'spigot', 'build-844', jenkins: 'http://ci.md-5.net', file: /spigot\.jar/
 
