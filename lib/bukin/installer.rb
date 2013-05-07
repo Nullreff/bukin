@@ -7,7 +7,7 @@ class Bukin::Installer
     if use_lockfile
       @lockfile = Bukin::Lockfile.new
     end
-    @paths = { server: path, plugin: "#{path}/plugins" }
+    @paths = { :server => path, :plugin => "#{path}/plugins" }
   end
 
   def install(type, data)
@@ -41,12 +41,12 @@ class Bukin::Installer
 
   def extract_files(file_data, path, match)
     file_names = []
-    file = Tempfile.new('bukin')
+    tempfile = Tempfile.new('bukin')
     begin
-      file.write(file_data)
-      file.close
+      tempfile.write(file_data)
+      tempfile.close
 
-      Zip::ZipFile.open(file.path) do |zipfile|
+      Zip::ZipFile.open(tempfile.path) do |zipfile|
         jars = zipfile.find_all {|file| file.name =~ match}
         jars.each do |file|
           file.extract(path + '/' + file.name) { true }
@@ -54,8 +54,8 @@ class Bukin::Installer
         end
       end
     ensure
-      file.close
-      file.unlink
+      tempfile.close
+      tempfile.unlink
     end
     file_names
   end

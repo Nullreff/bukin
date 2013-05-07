@@ -11,12 +11,11 @@ end
 def download_file(url, content_disposition = false)
   open(url, "User-Agent" => "Bukin #{Bukin::VERSION}") do |download|
     file_name = if download.meta['content-disposition']
-                  download.meta['content-disposition']
-                          .match(/filename=(\"?)(.+)\1/)[2]
-                          .force_encoding("UTF-8")
+                  download.meta['content-disposition'].match(/filename=(\"?)(.+)\1/)[2]
                 else
                   File.basename(url)
                 end
+    file_name = file_name.force_encoding('UTF-8') if file_name.respond_to?(:force_encoding)
     data = download.read
     return data, file_name
   end
