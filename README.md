@@ -34,11 +34,15 @@ You can specify specific versions of a plugin or server to install.  Craftbukkit
     plugin 'worldedit', '5.5.5'
     plugin 'worldguard', '5.7.3'
 
-Need something custom?  Use the `download` option.  Version is optional but will display when the plugin is downloading.
-
-    server 'craftbukkit', 'spigot-735', download: 'http://ci.md-5.net/job/Spigot/735/artifact/Spigot-Server/target/spigot.jar'
-    plugin 'mycustomplugin', '2.4', download: 'http://example.com/My-Custom-Plugin.jar'
-
 By default, bukin will try to download jar files from bukkit dev.  If only zip files are available, it will automatically extract all jar files from it.  If you want to specify what files are extracted from a zip file, use the `extract` option.  It takes a [ruby regular expression](http://ruby-doc.org/core-1.9.3/Regexp.html) used to match file names in the zip file.
 
     plugin 'permissionsex', '4.5', extract: /PermissionsEx.*\.jar/
+
+Plugins or servers can also be downloded from jenkins. Just specify the base url for jenkins and a [ruby regular expression](http://ruby-doc.org/core-1.9.3/Regexp.html) matching the file you want to download.
+
+    server 'spigot', 'build-844', jenkins: 'http://ci.md-5.net', file: /spigot\.jar/
+
+Need something custom?  Use the `download` option.  Version is optional but will display when the plugin is downloading.
+
+    plugin 'mycustomplugin', '2.4', download: 'http://example.com/My-Custom-Plugin.jar'
+

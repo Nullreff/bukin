@@ -10,7 +10,7 @@ class Bukin::Installer
     @paths = { server: path, plugin: "#{path}/plugins" }
   end
 
-  def install(type, provider, data)
+  def install(type, data)
     unless @paths.keys.include?(type)
       raise(ArgumentError, "You must specify one of the following types to install: #{@paths.keys.to_s}")
     end

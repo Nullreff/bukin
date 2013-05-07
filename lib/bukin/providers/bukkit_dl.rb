@@ -15,11 +15,6 @@ class Bukin::BukkitDl
   end
 
   def resolve_info(data)
-    if data[:download]
-      data[:display_version] = data[:version]
-      return data
-    end
-
     name = data[:name]
     version = data[:version] || 'latest-rb'
 
