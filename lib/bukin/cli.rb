@@ -8,8 +8,8 @@ require 'bukin/providers/jenkins'
 
 class Bukin::CLI < Thor
 
-  desc 'install', "Download and install the resources specified in a Bukfile"
-  def install
+  desc 'install [NAMES]', "Download and install the resources specified in a Bukfile"
+  def install(*names)
     # Parse in the Bukfile
     bukfile = section 'Parsing Bukfile' do
       Bukin::Bukfile.from_file
@@ -18,6 +18,15 @@ class Bukin::CLI < Thor
     server = bukfile.server_info
     plugins = bukfile.plugins_info
 
+    # If name are specified, only install resources with those names
+    if names.any?
+      server = nil unless names.include? server[:name]
+      plugins.select! {|plugin| names.include? plugin[:name]}
+      if server.nil? && plugins.empty?
+        raise Bukin::BukinError, "Nothing to install"
+      end
+    end
+
     # Grab information from the various providers
     direct_dl = Bukin::DirectDl.new
     jenkins = Bukin::Jenkins.new
@@ -25,15 +34,17 @@ class Bukin::CLI < Thor
     bukget = Bukin::Bukget.new
 
     # Server info
-    if direct_dl.usable(server)
-      direct_dl.resolve_info(server)
-    elsif jenkins.usable(server)
-      section "Fetching information from #{jenkins.url(server)}" do
-        jenkins.resolve_info(server)
-      end
-    else
-      section "Fetching information from #{bukkit_dl.url}" do
-        bukkit_dl.resolve_info(server)
+    if server
+      if direct_dl.usable(server)
+        direct_dl.resolve_info(server)
+      elsif jenkins.usable(server)
+        section "Fetching information from #{jenkins.url(server)}" do
+          jenkins.resolve_info(server)
+        end
+      else
+        section "Fetching information from #{bukkit_dl.url}" do
+          bukkit_dl.resolve_info(server)
+        end
       end
     end
 
@@ -62,14 +73,16 @@ class Bukin::CLI < Thor
       end
     end
 
-    section "Fetching information from #{bukget.url}" do
-      bukget_plugins.each do |plugin|
-        plugins.each do |plugin|
-          plugin[:server] ||= 'craftbukkit'
-          begin
-            bukget.resolve_info(plugin)
-          rescue OpenURI::HTTPError => ex
-            raise Bukin::BukinError, "There was an error downloading #{plugin[:name]} (#{plugin[:version]}).\n#{ex.message}"
+    if bukget_plugins.any?
+      section "Fetching information from #{bukget.url}" do
+        bukget_plugins.each do |plugin|
+          plugins.each do |plugin|
+            plugin[:server] ||= 'craftbukkit'
+            begin
+              bukget.resolve_info(plugin)
+            rescue OpenURI::HTTPError => ex
+              raise Bukin::BukinError, "There was an error downloading #{plugin[:name]} (#{plugin[:version]}).\n#{ex.message}"
+            end
           end
         end
       end
@@ -78,8 +91,10 @@ class Bukin::CLI < Thor
     # Download and install server and plugins
     installer = Bukin::Installer.new(Dir.pwd, true)
 
-    downloading server[:name], server[:display_version] do
-      installer.install(:server, server)
+    if server
+      downloading server[:name], server[:display_version] do
+        installer.install(:server, server)
+      end
     end
 
     plugins.each do |plugin|
