@@ -11,6 +11,23 @@ class Bukin::CLI < Thor
   desc 'install [NAMES]', "Download and install the resources specified in a Bukfile"
   def install(*names)
     # Parse in the Bukfile
+    server, plugins = parse_resources(names)
+
+    # Get all the informatin needed to install
+    prepare_resources(server, plugins)
+
+    # Download and install server and plugins
+    install_resources(server, plugins)
+  end
+
+  def help(*)
+    shell.say "Bukin is a plugin and server package manager for Minecraft."
+    shell.say
+    super
+  end
+
+private
+  def parse_resources(names)
     bukfile = section 'Parsing Bukfile' do
       Bukin::Bukfile.from_file
     end
@@ -27,6 +44,10 @@ class Bukin::CLI < Thor
       end
     end
 
+    return server, plugins
+  end
+
+  def prepare_resources(server, plugins)
     # Grab information from the various providers
     direct_dl = Bukin::DirectDl.new
     jenkins = Bukin::Jenkins.new
@@ -87,8 +108,9 @@ class Bukin::CLI < Thor
         end
       end
     end
+  end
 
-    # Download and install server and plugins
+  def install_resources(server, plugins)
     installer = Bukin::Installer.new(Dir.pwd, true)
 
     if server
@@ -104,13 +126,6 @@ class Bukin::CLI < Thor
     end
   end
 
-  def help(*)
-    shell.say "Bukin is a plugin and server package manager for Minecraft."
-    shell.say
-    super
-  end
-
-private
   def section(message)
     say "#{message}... "
     value = yield
