@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.name          = 'bukin'
   gem.version       = Bukin::VERSION
   gem.authors       = ['Ryan Mendivil']
-  gem.email         = ['rsmendivil@gmail.com']
+  gem.email         = ['contact@nullreff.net']
   gem.description   = 'Plugin and server package manager for Minecraft'
   gem.summary       = gem.description
   gem.homepage      = 'http://github.com/Nullreff/bukin'
