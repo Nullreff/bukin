@@ -22,21 +22,16 @@ class Bukin::Bukfile
     @resources = []
   end
 
-  def server(name, *args)
-    if @resources.find { |resource| resource[:name] == name }
-      abort("Error: #{name} is declared more than once in your #{FILE_NAME}")
-    end
-
-    options = args.last.is_a?(Hash) ? args.pop : {}
-    version = args.pop || nil
-
-    resource = { :name => name, :version => version }.merge(options)
-    resource[:path] ||= '.'
-
-    @resources << resource
+  def server(name, args)
+    add_resource(name, '.', args)
   end
 
-  def plugin(name, *args)
+  def plugin(name, args)
+    add_resource(name, 'plugins', args)
+  end
+
+private
+  def add_resource(name, default_path, *args)
     if @resources.find { |resource| resource[:name] == name }
       abort("Error: #{name} is declared more than once in your #{FILE_NAME}")
     end
@@ -45,7 +40,7 @@ class Bukin::Bukfile
     version = args.pop || nil
 
     resource = { :name => name, :version => version }.merge(options)
-    resource[:path] ||= 'plugins'
+    resource[:path] ||= default_path
 
     @resources << resource
   end
