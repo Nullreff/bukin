@@ -28,7 +28,7 @@ class Bukin::CLI < Thor
 private
   def parse_resources(names)
     resources = section 'Parsing Bukfile' do
-      Bukin::Bukfile.from_file.resources
+      Bukin::Bukfile.new.resources
     end
 
     # If name are specified, only install resources with those names

@@ -3,23 +3,14 @@ class Bukin::Bukfile
 
   attr_accessor :resources
 
-  def self.from_file(path = nil)
-    path ||= File.join(Dir.pwd, FILE_NAME)
-    from_code(File.read(path))
-  end
-
-  def self.from_block(&block)
-    from_code(&block)
-  end
-
-  def self.from_code(code)
-    bukfile = Bukin::Bukfile.new
-    bukfile.instance_eval(code)
-    bukfile
-  end
-
-  def initialize
+  def initialize(path = nil, &block)
     @resources = []
+    path ||= File.join(Dir.pwd, FILE_NAME)
+    if block
+     instance_eval(&block)
+    else
+      instance_eval(File.read(path))
+    end
   end
 
   def server(name, *args)
