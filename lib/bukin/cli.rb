@@ -21,8 +21,7 @@ class Bukin::CLI < Thor
   end
 
   def help(*)
-    shell.say "Bukin is a plugin and server package manager for Minecraft."
-    shell.say
+    shell.say "Bukin is a plugin and server package manager for Minecraft.\n"
     super
   end
 
@@ -59,11 +58,11 @@ private
       if direct_dl.usable(server)
         direct_dl.resolve_info(server)
       elsif jenkins.usable(server)
-        section "Fetching information from #{jenkins.url(server)}" do
+        fetching jenkins.url(server) do
           jenkins.resolve_info(server)
         end
       else
-        section "Fetching information from #{bukkit_dl.url}" do
+        fetching bukkit_dl.url do
           bukkit_dl.resolve_info(server)
         end
       end
@@ -89,13 +88,13 @@ private
     end
 
     jenkins_plugins.each do |plugin|
-      section "Fetching information from #{jenkins.url(plugin)}" do
+      fetching jenkins.url(plugin) do
         jenkins.resolve_info(plugin)
       end
     end
 
     if bukget_plugins.any?
-      section "Fetching information from #{bukget.url}" do
+      fetching bukget.url do
         bukget_plugins.each do |plugin|
           plugins.each do |plugin|
             plugin[:server] ||= 'craftbukkit'
@@ -140,5 +139,9 @@ private
     msg = "Downloading #{name}"
     msg << " (#{version})" if version
     section(msg, &block)
+  end
+
+  def fetching(url, &block)
+    section("Fetching information from #{url}", &block)
   end
 end
