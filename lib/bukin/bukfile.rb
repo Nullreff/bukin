@@ -22,16 +22,16 @@ class Bukin::Bukfile
     @resources = []
   end
 
-  def server(name, args)
+  def server(name, *args)
     add_resource(name, '.', args)
   end
 
-  def plugin(name, args)
+  def plugin(name, *args)
     add_resource(name, 'plugins', args)
   end
 
 private
-  def add_resource(name, default_path, *args)
+  def add_resource(name, default_path, args)
     if @resources.find { |resource| resource[:name] == name }
       raise Bukin::BukinError, "Error: #{name} is declared more than once in your #{FILE_NAME}"
     end
