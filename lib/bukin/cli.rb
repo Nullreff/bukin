@@ -11,13 +11,13 @@ class Bukin::CLI < Thor
   desc 'install [NAMES]', "Download and install the resources specified in a Bukfile"
   def install(*names)
     # Parse in the Bukfile
-    server, plugins = parse_resources(names)
+    resources = parse_resources(names)
 
     # Get all the informatin needed to install
-    prepare_resources(server, plugins)
+    prepare_resources(resources)
 
-    # Download and install server and plugins
-    install_resources(server, plugins)
+    # Download and install all resources
+    install_resources(resources)
   end
 
   def help(*)
@@ -27,81 +27,60 @@ class Bukin::CLI < Thor
 
 private
   def parse_resources(names)
-    bukfile = section 'Parsing Bukfile' do
-      Bukin::Bukfile.from_file
+    resources = section 'Parsing Bukfile' do
+      Bukin::Bukfile.from_file.resources
     end
-
-    server = bukfile.server_info
-    plugins = bukfile.plugins_info
 
     # If name are specified, only install resources with those names
     if names.any?
-      server = nil unless names.include? server[:name]
-      plugins.select! {|plugin| names.include? plugin[:name]}
-      if server.nil? && plugins.empty?
-        raise Bukin::BukinError, "Nothing to install"
-      end
+      resources.select! {|resource| names.include? resource[:name]}
+      raise Bukin::BukinError, "Nothing to install" if resources.empty?
     end
 
-    return server, plugins
+    resources
   end
 
-  def prepare_resources(server, plugins)
+  def prepare_resources(resources)
     # Grab information from the various providers
     direct_dl = Bukin::DirectDl.new
     jenkins = Bukin::Jenkins.new
     bukkit_dl = Bukin::BukkitDl.new
     bukget = Bukin::Bukget.new
 
-    # Server info
-    if server
-      if direct_dl.usable(server)
-        direct_dl.resolve_info(server)
-      elsif jenkins.usable(server)
-        fetching jenkins.url(server) do
-          jenkins.resolve_info(server)
-        end
+    # Provider specific resources
+    direct_dl_resourcess = []
+    jenkins_resourcess = []
+    bukget_resourcess = []
+
+    resources.each do |resource|
+      if direct_dl.usable(resource)
+        direct_dl_resources << resource
+      elsif jenkins.usable(resource)
+        jenkins_resources << resource
       else
-        fetching bukkit_dl.url do
-          bukkit_dl.resolve_info(server)
-        end
+        bukget_resources << resource
       end
     end
 
-    # Plugins info
-    direct_dl_plugins = []
-    jenkins_plugins = []
-    bukget_plugins = []
+    direct_dl_resources.each do |resource|
+      direct_dl.resolve_info(resource)
+    end
 
-    plugins.each do |plugin|
-      if direct_dl.usable(plugin)
-        direct_dl_plugins << plugin
-      elsif jenkins.usable(plugin)
-        jenkins_plugins << plugin
-      else
-        bukget_plugins << plugin
+    jenkins_resources.each do |resource|
+      fetching jenkins.url(resource) do
+        jenkins.resolve_info(resource)
       end
     end
 
-    direct_dl_plugins.each do |plugin|
-      direct_dl.resolve_info(plugin)
-    end
-
-    jenkins_plugins.each do |plugin|
-      fetching jenkins.url(plugin) do
-        jenkins.resolve_info(plugin)
-      end
-    end
-
-    if bukget_plugins.any?
+    if bukget_resources.any?
       fetching bukget.url do
-        bukget_plugins.each do |plugin|
-          plugins.each do |plugin|
-            plugin[:server] ||= 'craftbukkit'
+        bukget_resources.each do |resource|
+          resources.each do |resource|
+            resource[:server] ||= 'craftbukkit'
             begin
-              bukget.resolve_info(plugin)
+              bukget.resolve_info(resource)
             rescue OpenURI::HTTPError => ex
-              raise Bukin::BukinError, "There was an error downloading #{plugin[:name]} (#{plugin[:version]}).\n#{ex.message}"
+              raise Bukin::BukinError, "There was an error downloading #{resource[:name]} (#{resource[:version]}).\n#{ex.message}"
             end
           end
         end
@@ -109,18 +88,12 @@ private
     end
   end
 
-  def install_resources(server, plugins)
+  def install_resources(resources)
     installer = Bukin::Installer.new(Dir.pwd, true)
 
-    if server
-      downloading server[:name], server[:display_version] do
-        installer.install(:server, server)
-      end
-    end
-
-    plugins.each do |plugin|
-      downloading plugin[:name], plugin[:version] do
-        installer.install(:plugin, plugin)
+    resources.each do |resource|
+      downloading resource[:name], resource[:version] do
+        installer.install(resource)
       end
     end
   end

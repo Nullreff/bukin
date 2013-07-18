@@ -33,7 +33,7 @@ class Bukin::Bukfile
 private
   def add_resource(name, default_path, *args)
     if @resources.find { |resource| resource[:name] == name }
-      abort("Error: #{name} is declared more than once in your #{FILE_NAME}")
+      raise Bukin::BukinError, "Error: #{name} is declared more than once in your #{FILE_NAME}"
     end
 
     options = args.last.is_a?(Hash) ? args.pop : {}

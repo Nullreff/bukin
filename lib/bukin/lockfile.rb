@@ -9,55 +9,21 @@ class Bukin::Lockfile
       @lockfile = YAML::load_file(LOCK_FILE)
     else
       @lockfile = {
-        'server' => {},
-        'plugins' => {}
+        'resources' => {}
       }
     end
   end
 
-  def set_server(data)
-    self.server = {
-      'name' => data[:name],
-      'version' => data[:version],
-      'file' => data[:file]
-    }
-  end
-
-  def add_plugin(data)
-    self.plugins[data[:name]] = {
+  def add(data)
+    self.resources[data[:name]] = {
       'version' => data[:version],
       'files' => data[:files] || [data[:file]]
     }
     save
   end
 
-  def add(type, data)
-    case type
-    when :server
-      set_server(data)
-    when :plugin
-      add_plugin(data)
-    else
-      raise(ArgumentError, "You must specify :server or :plugin as the type when adding to a lock file")
-    end
-  end
-
-  def remove_plugin(name)
-    plugins.delete(name)
-    save
-  end
-
-  def plugins
-    @lockfile['plugins']
-  end
-
-  def server
-    @lockfile['server']
-  end
-
-  def server=(value)
-    @lockfile['server'] = value
-    save
+  def resources
+    @lockfile['resources']
   end
 
   def save
