@@ -48,9 +48,9 @@ private
     bukget = Bukin::Bukget.new
 
     # Provider specific resources
-    direct_dl_resourcess = []
-    jenkins_resourcess = []
-    bukget_resourcess = []
+    direct_dl_resources = []
+    jenkins_resources = []
+    bukget_resources = []
 
     resources.each do |resource|
       if direct_dl.usable(resource)
