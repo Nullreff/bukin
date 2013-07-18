@@ -1,7 +1,7 @@
 class Bukin::Bukfile
   FILE_NAME = 'Bukfile'
 
-  attr_accessor :server_info, :plugins_info
+  attr_accessor :resources
 
   def self.from_file(path = nil)
     path ||= File.join(Dir.pwd, FILE_NAME)
@@ -19,28 +19,34 @@ class Bukin::Bukfile
   end
 
   def initialize
-    @plugins_info = []
+    @resources = []
   end
 
   def server(name, *args)
-    if @server_info
-      abort("Error: There is more than one server declared in your #{FILE_NAME}")
+    if @resources.find { |resource| resource[:name] == name }
+      abort("Error: #{name} is declared more than once in your #{FILE_NAME}")
     end
 
     options = args.last.is_a?(Hash) ? args.pop : {}
     version = args.pop || nil
 
-    @server_info = { :name => name, :version => version }.merge(options)
+    resource = { :name => name, :version => version }.merge(options)
+    resource[:path] ||= '.'
+
+    @resources << resource
   end
 
   def plugin(name, *args)
-    if @plugins_info.find { |p| p[:name] == name }
-      abort("Error: You declared the plugin #{name} more than once in your #{FILE_NAME}")
+    if @resources.find { |resource| resource[:name] == name }
+      abort("Error: #{name} is declared more than once in your #{FILE_NAME}")
     end
 
     options = args.last.is_a?(Hash) ? args.pop : {}
     version = args.pop || nil
 
-    @plugins_info << { :name => name, :version => version }.merge(options)
+    resource = { :name => name, :version => version }.merge(options)
+    resource[:path] ||= 'plugins'
+
+    @resources << resource
   end
 end
