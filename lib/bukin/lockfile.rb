@@ -5,25 +5,23 @@ LOCK_FILE = 'Bukfile.lock'
 class Bukin::Lockfile
 
   def initialize(*)
-    if File.exist?(LOCK_FILE)
-      @lockfile = YAML::load_file(LOCK_FILE)
-    else
-      @lockfile = {
-        'resources' => {}
-      }
+    exists = File.exist?(LOCK_FILE)
+
+    @lockfile = YAML::load_file(LOCK_FILE) if exists
+
+    if @lockfile['resources'].nil? || !exists
+      @lockfile = { 'resources' => {} }
     end
   end
 
   def add(data)
-    self.resources[data[:name]] = {
+    name = data[:name]
+    resources = @lockfile['resources']
+    resources[name] = {
       'version' => data[:version],
       'files' => data[:files] || [data[:file]]
     }
     save
-  end
-
-  def resources
-    @lockfile['resources']
   end
 
   def save
