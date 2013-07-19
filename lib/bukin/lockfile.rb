@@ -19,7 +19,7 @@ class Bukin::Lockfile
     resources = @lockfile['resources']
     resources[name] = {
       'version' => data[:version],
-      'files' => data[:files] || [data[:file]]
+      'files' => data[:files]
     }
     save
   end

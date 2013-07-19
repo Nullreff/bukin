@@ -2,38 +2,29 @@ require 'bukin/lockfile'
 require 'zip/zip'
 
 class Bukin::Installer
+  PATHS = { :server => '.', :plugin => 'plugins' }
 
   def initialize(path, use_lockfile = false)
-    if use_lockfile
-      @lockfile = Bukin::Lockfile.new
-    end
-    @paths = { :server => '.', :plugin => 'plugins' }
+    @lockfile = Bukin::Lockfile.new if use_lockfile
   end
 
   def install(data)
-    path = @paths[data[:type]]
+    path = PATHS[data[:type]]
+    file_names = []
+    dl_data, dl_name = download_file(data[:download])
 
-    file_data, file_name = download_file(data[:download])
-    if File.extname(file_name) == '.zip'
+    if File.extname(dl_name) == '.zip'
       match = data[:extract] || /\.jar$/
-      file_names = extract_files(file_data, path, match)
-      if file_names.empty?
-        raise(Bukin::InstallError, "The resource #{data[:name]} (#{data[:version]}) has no jar files in it's download (zip file).")
-      end
-      if @lockfile
-        if file_names.size == 1
-          data[:file] = file_names.first
-        else
-          data[:files] = file_names
-        end
-        @lockfile.add(data)
-      end
+      file_names = extract_files(dl_data, path, match)
+      raise Bukin::InstallError, "The resource #{data[:name]} (#{data[:version]}) has no jar files in it's download (zip file)." if file_names.empty?
     else
-      save_download(file_data, file_name, path)
-      if @lockfile
-        data[:file] = file_name
-        @lockfile.add(data)
-      end
+      save_download(dl_data, dl_name, path)
+      file_names << dl_name
+    end
+
+    if @lockfile
+      data[:files] = file_names
+      @lockfile.add(data)
     end
   end
 
