@@ -8,13 +8,13 @@ describe Bukin::Bukfile do
       bukfile = Bukin::Bukfile.new{}
       bukfile.resources.size.should == 0
 
-      bukfile.send(type, '')
+      bukfile.send(type, 'resource_name')
       bukfile.resources.size.should == 1
     end
 
     it "adds a #{type} by constructor" do
       bukfile = Bukin::Bukfile.new do
-        send(type, '')
+        send(type, 'resource_name')
       end
 
       bukfile.resources.size.should == 1
@@ -28,26 +28,29 @@ describe Bukin::Bukfile do
       bukfile.resources.first[:name].should == 'resource_name'
     end
 
-    it "adds a #{type} with the correct path" do
+    it "adds a #{type} with the correct type" do
       bukfile = Bukin::Bukfile.new do
         send(type, 'resource_name')
       end
 
-      resource = bukfile.resources.first
-      case type
-      when :server
-        resource[:path].should == '.'
-      when :plugin
-        resource[:path].should == 'plugins'
-      end
+      resource = bukfile.resources.first[:type].should == type
     end
 
     it "adds a #{type} with the correct version" do
       bukfile = Bukin::Bukfile.new do
-        send(type, '', '1.0.0')
+        send(type, 'resource_name', '1.0.0')
       end
 
       bukfile.resources.first[:version].should == '1.0.0'
+    end
+
+    it "will not add the same #{type} more than once" do
+      expect do
+        bukfile = Bukin::Bukfile.new do
+          send(type, 'duplicate_resource')
+          send(type, 'duplicate_resource')
+        end
+      end.to raise_error(Bukin::BukinError)
     end
   end
 

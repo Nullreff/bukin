@@ -14,24 +14,23 @@ class Bukin::Bukfile
   end
 
   def server(name, *args)
-    add_resource(name, '.', args)
+    add_resource(name, :server, args)
   end
 
   def plugin(name, *args)
-    add_resource(name, 'plugins', args)
+    add_resource(name, :plugin, args)
   end
 
 private
-  def add_resource(name, default_path, args)
-    if @resources.find { |resource| resource[:name] == name }
-      raise Bukin::BukinError, "Error: #{name} is declared more than once in your #{FILE_NAME}"
+  def add_resource(name, type, args)
+    if @resources.find { |resource| resource[:name] == name && resource[:type] == type }
+      raise Bukin::BukinError, "Error: The #{type} '#{name}' is declared more than once in your #{FILE_NAME}"
     end
 
     options = args.last.is_a?(Hash) ? args.pop : {}
     version = args.pop || nil
 
-    resource = { :name => name, :version => version }.merge(options)
-    resource[:path] ||= default_path
+    resource = { :name => name, :type => type, :version => version }.merge(options)
 
     @resources << resource
   end
