@@ -36,9 +36,9 @@ class Bukin::Installer
       tempfile.close
 
       Zip::ZipFile.open(tempfile.path) do |zipfile|
-        jars = zipfile.find_all {|file| file.name =~ match}
-        jars.each do |file|
-          file.extract(path + '/' + file.name) { true }
+        files = zipfile.find_all {|file| file.name =~ match}
+        files.each do |file|
+          file.extract(File.join(path, file.name)) { true }
           file_names << file.name
         end
       end
