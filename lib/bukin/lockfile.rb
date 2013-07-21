@@ -1,22 +1,17 @@
 require 'yaml'
 
-LOCK_FILE = 'Bukfile.lock'
-
 class Bukin::Lockfile
+  FILE_NAME = 'Bukfile.lock'
+  attr_reader :path
 
-  def initialize(*)
-    exists = File.exist?(LOCK_FILE)
-
-    @lockfile = YAML::load_file(LOCK_FILE) if exists
-
-    if @lockfile['resources'].nil? || !exists
-      @lockfile = { 'resources' => {} }
-    end
+  def initialize(path = nil)
+    @path = path || File.join(Dir.pwd, FILE_NAME)
+    @resources = File.exist?(@path) ? YAML::load_file(@path) : {}
+    @resources = { 'resources' => {} } if @resources['resources'].nil?
   end
 
   def add(data)
     name = data[:name]
-    resources = @lockfile['resources']
     resources[name] = {
       'version' => data[:version],
       'files' => data[:files]
@@ -24,7 +19,11 @@ class Bukin::Lockfile
     save
   end
 
+  def resources
+    @resources['resources']
+  end
+
   def save
-    File.open(LOCK_FILE, "w") {|file| file.write @lockfile.to_yaml}
+    File.open(@path, "w") {|file| file.write @resources.to_yaml}
   end
 end
