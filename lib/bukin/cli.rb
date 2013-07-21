@@ -46,28 +46,30 @@ private
   end
 
   def prepare_resources(raw_resources)
-    resources = {}
+    downloads = {}
+    final_resources = []
 
     raw_resources.each do |resource|
       name, provider = PROVIDERS.find {|name, p| resource[name]}
       next unless name
 
       url = resource[name]
-      resources[url] ||= []
-      resources[url] << provider.new(resource)
+      downloads[url] ||= []
+      downloads[url] << provider.new(resource)
     end
 
-    resources.each do |url, resources|
+    downloads.each do |url, resources|
       fetching url do
         resources.each do |resource|
           begin
-            resource.resolve_info
+            final_resources << resource.resolve_info
           rescue OpenURI::HTTPError => ex
-            raise Bukin::BukinError, "There was an error fetching information about '#{resource[:name]} (#{resource[:version]})'.\n#{ex.message}"
+            raise Bukin::BukinError, "There was an error fetching information about '#{resource.data[:name]} (#{resource.data[:version]})'.\n#{ex.message}"
           end
         end
       end
     end
+    final_resources
   end
 
   def install_resources(resources)
