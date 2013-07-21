@@ -3,6 +3,7 @@ Bukin
 
 Plugin and server installer for Minecraft similar to [Bundler](http://gembundler.com/).  Still a work in progress...
 
+[![Build Status](https://travis-ci.org/Nullreff/bukin.png)](https://travis-ci.org/Nullreff/bukin)
 [![Dependency Status](https://gemnasium.com/Nullreff/bukin.png)](https://gemnasium.com/Nullreff/bukin)
 [![Code Climate](https://codeclimate.com/github/Nullreff/bukin.png)](https://codeclimate.com/github/Nullreff/bukin)
 
