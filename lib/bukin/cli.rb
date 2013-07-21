@@ -3,7 +3,6 @@ require 'bukin/installer'
 require 'bukin/bukfile'
 require 'bukin/providers/bukget'
 require 'bukin/providers/bukkit_dl'
-require 'bukin/providers/direct_dl'
 require 'bukin/providers/jenkins'
 
 class Bukin::CLI < Thor
