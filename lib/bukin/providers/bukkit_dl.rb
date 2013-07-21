@@ -1,4 +1,3 @@
-require 'bukin/utils'
 require 'json'
 
 # Bukkit download api
