@@ -21,7 +21,7 @@ class Bukin::Jenkins
     info = JSON.parse(open(url).read)
 
     download_info = find_file(info['artifacts'], data[:file])
-    data[:version] = data[:display_version] = version
+    data[:version] = version
     data[:download] = "#{base_path}/artifact/#{download_info['relativePath']}"
     data
   end

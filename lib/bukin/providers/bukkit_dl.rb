@@ -18,7 +18,6 @@ class Bukin::BukkitDl
     info = JSON.parse(open(url).read)
 
     data[:version] = "build-#{info['build_number']}"
-    data[:display_version] = info['version']
     data[:download] = data[:bukkit_dl] + info['file']['url']
     data
   end
