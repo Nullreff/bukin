@@ -13,13 +13,15 @@ class Bukin::CLI < Thor
     :jenkins => Bukin::Jenkins
   }
 
-  desc 'install [NAMES]', "Download and install the resources specified in a Bukfile"
+  desc 'install [NAMES]', "Download and install the resources specified in a "\
+                          "Bukfile.\nOptionally specify the names of specific "\
+                          "plugins to install."
   def install(*names)
     # Parse in the Bukfile
-    resources = parse_resources(names)
+    raw_resources = parse_resources(names)
 
     # Get all the informatin needed to install
-    prepare_resources(resources)
+    resources = prepare_resources(raw_resources)
 
     # Download and install all resources
     install_resources(resources)
@@ -32,15 +34,11 @@ class Bukin::CLI < Thor
 
 private
   def parse_resources(names)
-    resources = section 'Parsing Bukfile' do
-      Bukin::Bukfile.new.resources
-    end
+    resources = section('Parsing Bukfile') {Bukin::Bukfile.new.resources}
 
     # If name are specified, only install resources with those names
-    if names.any?
-      resources.select! {|resource| names.include? resource[:name]}
-      raise Bukin::BukinError, "Nothing to install" if resources.empty?
-    end
+    resources.select! {|resource| names.include?(resource[:name])} if names.any?
+    raise Bukin::BukinError, "Nothing to install" if resources.empty?
 
     resources
   end
@@ -59,16 +57,22 @@ private
     end
 
     downloads.each do |url, resources|
-      fetching url do
+      section "Fetching information from #{url}" do
         resources.each do |resource|
           begin
             final_resources << resource.resolve_info
           rescue OpenURI::HTTPError => ex
-            raise Bukin::BukinError, "There was an error fetching information about '#{resource.data[:name]} (#{resource.data[:version]})'.\n#{ex.message}"
+            raise(
+              Bukin::BukinError,
+              "There was an error fetching information about "\
+              "'#{resource.data[:name]} (#{resource.data[:version]})'.\n"\
+              "#{ex.message}"
+            )
           end
         end
       end
     end
+
     final_resources
   end
 
@@ -80,7 +84,12 @@ private
         begin
           installer.install(resource)
         rescue OpenURI::HTTPError => ex
-          raise Bukin::BukinError, "There was an error installing '#{resource[:name]} (#{resource[:version]})'.\n#{ex.message}"
+          raise(
+            Bukin::BukinError,
+            "There was an error installing "\
+            "'#{resource[:name]} (#{resource[:version]})'.\n"\
+            "#{ex.message}"
+          )
         end
       end
     end
@@ -100,9 +109,5 @@ private
     msg = "Downloading #{name}"
     msg << " (#{version})" if version
     section(msg, &block)
-  end
-
-  def fetching(url, &block)
-    section("Fetching information from #{url}", &block) if url
   end
 end
