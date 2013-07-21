@@ -7,6 +7,11 @@ require 'bukin/providers/direct_dl'
 require 'bukin/providers/jenkins'
 
 class Bukin::CLI < Thor
+  PROVIDERS = {
+    :bukkit_dl => Bukin::BukkitDl,
+    :bukget => Bukin::Bukget,
+    :jenkins => Bukin::Jenkins
+  }
 
   desc 'install [NAMES]', "Download and install the resources specified in a Bukfile"
   def install(*names)
@@ -43,27 +48,13 @@ private
   def prepare_resources(raw_resources)
     resources = {}
 
-    # Needs to:
-    # * Display Url
-    # * Resolve information
-
     raw_resources.each do |resource|
-      next if resource[:download]
-      if resource[:jenkins]
-        url = resource[:jenkins]
-        resources[url] ||= []
-        resources[url] << Bukin::Jenkins.new(resource)
-      elsif resource[:bukkit_dl]
-        url = resource[:bukkit_dl]
-        resources[url] ||= []
-        resources[url] << Bukin::BukkitDl.new(resource)
-      elsif resource[:bukget]
-        url = resource[:bukget]
-        resources[url] ||= []
-        resources[url] << Bukin::Bukget.new(resource)
-      else
-        raise Bukin::BukinError, "Unable to determine the provider for the resource'#{resource[:name]}'"
-      end
+      name, provider = PROVIDERS.find {|name, p| resource[name]}
+      next unless name
+
+      url = resource[name]
+      resources[url] ||= []
+      resources[url] << provider.new(resource)
     end
 
     resources.each do |url, resources|
@@ -72,7 +63,7 @@ private
           begin
             resource.resolve_info
           rescue OpenURI::HTTPError => ex
-            raise Bukin::BukinError, "There was an error downloading #{resource[:name]} (#{resource[:version]}).\n#{ex.message}"
+            raise Bukin::BukinError, "There was an error fetching information about '#{resource[:name]} (#{resource[:version]})'.\n#{ex.message}"
           end
         end
       end
@@ -84,7 +75,11 @@ private
 
     resources.each do |resource|
       downloading resource[:name], resource[:version] do
-        installer.install(resource)
+        begin
+          installer.install(resource)
+        rescue OpenURI::HTTPError => ex
+          raise Bukin::BukinError, "There was an error installing '#{resource[:name]} (#{resource[:version]})'.\n#{ex.message}"
+        end
       end
     end
   end
