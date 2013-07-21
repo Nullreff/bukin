@@ -14,7 +14,7 @@ class Bukin::Installer
     dl_data, dl_name = download_file(data[:download])
 
     if File.extname(dl_name) == '.zip'
-      match = data[:extract] || /\.jar$/
+      match = get_match(data[:extract])
       file_names = extract_files(dl_data, path, match)
       raise Bukin::InstallError, "The resource #{data[:name]} (#{data[:version]}) has no jar files in it's download (zip file)." if file_names.empty?
     else
@@ -47,5 +47,20 @@ class Bukin::Installer
       tempfile.unlink
     end
     file_names
+  end
+
+  def self.get_match(match)
+    case match
+    when Regexp
+      match
+    when String
+      /^#{Regexp.quote(match)}$/
+    when :all
+      //
+    when nil
+      /\.jar$/
+    else
+      raise Bukin::InstallError, "The extract option #{match} is not valid.  Please use a String, Regexp or :all"
+    end
   end
 end
