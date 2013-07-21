@@ -2,16 +2,13 @@ require 'json'
 
 # Api for downloading from jenkins
 class Bukin::Jenkins
-  
-  def usable(data)
-    !!data[:jenkins]
+  attr_reader :data
+
+  def initialize(data)
+    @data = data
   end
 
-  def url(data)
-    data[:jenkins]
-  end
-
-  def resolve_info(data)
+  def resolve_info
     name = data[:name]
     version = data[:version] || 'lastSuccessfulBuild'
 

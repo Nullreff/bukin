@@ -4,17 +4,14 @@ require 'json'
 # Bukkit download api
 # Docs: http://dl.bukkit.org/about/
 class Bukin::BukkitDl
-  attr_reader :url
+  DEFAULT_URL = 'http://dl.bukkit.org'
+  attr_reader :data
 
-  def initialize(url = 'http://dl.bukkit.org')
-    @url = url
+  def initialize(data)
+    @data = data
   end
 
-  def api_url
-    "#{url}/api/1.0/downloads"
-  end
-
-  def resolve_info(data)
+  def resolve_info
     name = data[:name]
     version = data[:version] || 'latest-rb'
 
@@ -23,7 +20,12 @@ class Bukin::BukkitDl
 
     data[:version] = "build-#{info['build_number']}"
     data[:display_version] = info['version']
-    data[:download] = @url + info['file']['url']
+    data[:download] = data[:bukkit_dl] + info['file']['url']
     data
+  end
+
+private
+  def api_url
+    "#{data[:bukkit_dl]}/api/1.0/downloads"
   end
 end

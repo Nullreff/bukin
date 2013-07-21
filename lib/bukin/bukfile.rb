@@ -1,5 +1,6 @@
 class Bukin::Bukfile
   FILE_NAME = 'Bukfile'
+  PROVIDERS = [:download, :jenkins, :bukkit_dl, :bukget]
 
   attr_accessor :resources
 
@@ -14,11 +15,15 @@ class Bukin::Bukfile
   end
 
   def server(name, *args)
-    add_resource(name, :server, args)
+    add_resource name, :server, args do |resource|
+      resource[:bukkit_dl] = Bukin::BukkitDl::DEFAULT_URL
+    end
   end
 
   def plugin(name, *args)
-    add_resource(name, :plugin, args)
+    add_resource name, :plugin, args do |resource|
+      resource[:bukget] = Bukin::Bukget::DEFAULT_URL
+    end
   end
 
 private
@@ -31,6 +36,11 @@ private
     version = args.pop || nil
 
     resource = { :name => name, :type => type, :version => version }.merge(options)
+
+    # Already have a specific provider assigned
+    unless PROVIDERS.any? {|key| resource.key?(key)}
+      yield resource
+    end
 
     @resources << resource
   end

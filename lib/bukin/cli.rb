@@ -40,48 +40,39 @@ private
     resources
   end
 
-  def prepare_resources(resources)
-    # Grab information from the various providers
-    direct_dl = Bukin::DirectDl.new
-    jenkins = Bukin::Jenkins.new
-    bukkit_dl = Bukin::BukkitDl.new
-    bukget = Bukin::Bukget.new
+  def prepare_resources(raw_resources)
+    resources = {}
 
-    # Provider specific resources
-    direct_dl_resources = []
-    jenkins_resources = []
-    bukget_resources = []
+    # Needs to:
+    # * Display Url
+    # * Resolve information
 
-    resources.each do |resource|
-      if direct_dl.usable(resource)
-        direct_dl_resources << resource
-      elsif jenkins.usable(resource)
-        jenkins_resources << resource
+    raw_resources.each do |resource|
+      next if resource[:download]
+      if resource[:jenkins]
+        url = resource[:jenkins]
+        resources[url] ||= []
+        resources[url] << Bukin::Jenkins.new(resource)
+      elsif resource[:bukkit_dl]
+        url = resource[:bukkit_dl]
+        resources[url] ||= []
+        resources[url] << Bukin::BukkitDl.new(resource)
+      elsif resource[:bukget]
+        url = resource[:bukget]
+        resources[url] ||= []
+        resources[url] << Bukin::Bukget.new(resource)
       else
-        bukget_resources << resource
+        raise Bukin::BukinError, "Unable to determine the provider for the resource'#{resource[:name]}'"
       end
     end
 
-    direct_dl_resources.each do |resource|
-      direct_dl.resolve_info(resource)
-    end
-
-    jenkins_resources.each do |resource|
-      fetching jenkins.url(resource) do
-        jenkins.resolve_info(resource)
-      end
-    end
-
-    if bukget_resources.any?
-      fetching bukget.url do
-        bukget_resources.each do |resource|
-          resources.each do |resource|
-            resource[:server] ||= 'craftbukkit'
-            begin
-              bukget.resolve_info(resource)
-            rescue OpenURI::HTTPError => ex
-              raise Bukin::BukinError, "There was an error downloading #{resource[:name]} (#{resource[:version]}).\n#{ex.message}"
-            end
+    resources.each do |url, resources|
+      fetching url do
+        resources.each do |resource|
+          begin
+            resource.resolve_info
+          rescue OpenURI::HTTPError => ex
+            raise Bukin::BukinError, "There was an error downloading #{resource[:name]} (#{resource[:version]}).\n#{ex.message}"
           end
         end
       end
@@ -115,6 +106,6 @@ private
   end
 
   def fetching(url, &block)
-    section("Fetching information from #{url}", &block)
+    section("Fetching information from #{url}", &block) if url
   end
 end

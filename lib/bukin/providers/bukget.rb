@@ -5,23 +5,18 @@ require 'cgi'
 # BukGet api
 # Docs: http://bukget.org/pages/docs/API3.html
 class Bukin::Bukget
-  attr_reader :url
+  DEFAULT_URL = 'http://api.bukget.org'
+  attr_reader :data
 
-  def initialize(url = 'http://api.bukget.org')
-    @url = url
+  def initialize(data)
+    @data = data
   end
 
-  def api_url
-    "#{url}/3"
-  end
-
-  def resolve_info(data)
-    return data if data[:download]
-
+  def resolve_info
     name = data[:name]
     version = data[:version] || 'latest'
     server = data[:server]
-    server = 'bukkit' if server == 'craftbukkit'
+    server = 'bukkit' if server.nil? || server == 'craftbukkit'
 
     url = "#{api_url}/plugins/#{CGI.escape(server)}/#{CGI.escape(name)}/#{CGI.escape(version)}"
     info = JSON.parse(open(url).read)
@@ -43,8 +38,16 @@ class Bukin::Bukget
     data
   end
 
+private
+  def api_url
+    "#{url}/3"
+  end
+
+  def url
+    data[:bukget]
+  end
+
   def jar_extension?(version_data)
     File.extname(version_data['filename']) == '.jar'
   end
-
 end
