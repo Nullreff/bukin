@@ -20,4 +20,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency('thor', '~> 0.18.1')
   gem.add_dependency('json', '~> 1.8.0')
   gem.add_dependency('rubyzip', '~> 0.9.9')
+  gem.add_development_dependency('rspec', '~> 2.14.1')
 end
