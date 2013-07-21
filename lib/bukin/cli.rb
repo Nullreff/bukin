@@ -1,4 +1,5 @@
 require 'thor'
+require 'open-uri'
 require 'bukin/installer'
 require 'bukin/bukfile'
 require 'bukin/providers/bukget'
