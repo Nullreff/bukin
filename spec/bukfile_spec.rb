@@ -52,6 +52,38 @@ describe Bukin::Bukfile do
         end
       end.to raise_error(Bukin::BukinError)
     end
+
+    it "adds a #{type} with the correct jenkins provider" do
+      bukfile = Bukin::Bukfile.new do
+        send(type, 'resource_name', :jenkins => 'http://example.com')
+      end
+
+      bukfile.resources.first[:jenkins].should == 'http://example.com'
+    end
+
+    it "adds a #{type} with the correct download link" do
+      bukfile = Bukin::Bukfile.new do
+        send(type, 'resource_name', :download => 'http://example.com')
+      end
+
+      bukfile.resources.first[:download].should == 'http://example.com'
+    end
+  end
+
+  it "adds a server with the correct provider" do
+    bukfile = Bukin::Bukfile.new do
+      server 'resource_name'
+    end
+
+    bukfile.resources.first[:bukkit_dl].should == Bukin::BukkitDl::DEFAULT_URL
+  end
+
+  it "adds a plugin with the correct provider" do
+    bukfile = Bukin::Bukfile.new do
+      plugin 'resource_name'
+    end
+
+    bukfile.resources.first[:bukget].should == Bukin::Bukget::DEFAULT_URL
   end
 
   it 'adds both plugins and servers' do
