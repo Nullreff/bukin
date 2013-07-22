@@ -23,7 +23,7 @@ class Bukin::Installer
     end
 
     if @lockfile
-      data[:files] = file_names
+      data[:files] = file_names.map {|file_name| File.join(path, file_name)}
       @lockfile.add(data)
     end
   end
