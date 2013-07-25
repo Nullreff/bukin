@@ -6,6 +6,7 @@ Plugin and server installer for Minecraft similar to [Bundler](http://gembundler
 [![Build Status](https://travis-ci.org/Nullreff/bukin.png)](https://travis-ci.org/Nullreff/bukin)
 [![Dependency Status](https://gemnasium.com/Nullreff/bukin.png)](https://gemnasium.com/Nullreff/bukin)
 [![Code Climate](https://codeclimate.com/github/Nullreff/bukin.png)](https://codeclimate.com/github/Nullreff/bukin)
+[![Coverage Status](https://coveralls.io/repos/Nullreff/bukin/badge.png?branch=master)](https://coveralls.io/r/Nullreff/bukin?branch=master)
 
 Installation
 ------------
