@@ -1,14 +1,14 @@
 require 'spec_helper'
 require 'bukin'
-require 'fakefs'
+require 'fakefs/safe'
 require 'yaml'
 
 describe Bukin::Lockfile do
   PATH = File.join(Dir.pwd, Bukin::Lockfile::FILE_NAME)
 
-  before :each do
-    File.delete(PATH) if File.exist?(PATH)
-  end
+  before(:each) {File.delete(PATH) if File.exist?(PATH)}
+  before(:all) {FakeFS.activate!}
+  after(:all) {FakeFS.deactivate!}
 
   it 'assignes a default path if none is provided' do
     lockfile = Bukin::Lockfile.new

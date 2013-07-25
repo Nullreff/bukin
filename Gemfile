@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'rake'
+  gem 'rspec', '~> 2.14.1'
+  gem 'rake', '~> 10.1.0'
   gem 'coveralls', :require => false
+  gem 'fakefs', '~> 0.4.2', :require => 'fakefs/safe'
 end
