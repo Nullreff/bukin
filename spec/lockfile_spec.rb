@@ -4,11 +4,13 @@ require 'fakefs/safe'
 require 'yaml'
 
 describe Bukin::Lockfile do
-  PATH = File.join(Dir.pwd, Bukin::Lockfile::FILE_NAME)
 
   before(:each) {File.delete(PATH) if File.exist?(PATH)}
-  before(:all) {FakeFS.activate!}
   after(:all) {FakeFS.deactivate!}
+  before(:all) do
+    FakeFS.activate!
+    PATH = File.join(Dir.pwd, Bukin::Lockfile::FILE_NAME)
+  end
 
   it 'assignes a default path if none is provided' do
     lockfile = Bukin::Lockfile.new
