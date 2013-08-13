@@ -11,10 +11,6 @@ class Bukin::BukkitDl
   end
 
   def resolve_info
-    name = data[:name]
-    version = data[:version] || 'latest-rb'
-
-    url = "#{api_url}/projects/#{name}/view/#{version}/"
     info = JSON.parse(open(url).read)
 
     data[:version] = "build-#{info['build_number']}"
@@ -22,8 +18,15 @@ class Bukin::BukkitDl
     data
   end
 
-private
-  def api_url
-    "#{data[:bukkit_dl]}/api/1.0/downloads"
+  def url
+    "#{data[:bukkit_dl]}/api/1.0/downloads/projects/#{name}/view/#{version}/"
+  end
+
+  def name
+    data[:name]
+  end
+
+  def version
+    data[:version] || 'latest-rb'
   end
 end
