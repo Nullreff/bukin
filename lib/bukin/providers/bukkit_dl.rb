@@ -2,13 +2,9 @@ require 'json'
 
 # Bukkit download api
 # Docs: http://dl.bukkit.org/about/
-class Bukin::BukkitDl
+class Bukin::BukkitDl < Provider
   DEFAULT_URL = 'http://dl.bukkit.org'
-  attr_reader :data
-
-  def initialize(data)
-    @data = data
-  end
+  DEFAUTL_VERSION = 'latest-rb'
 
   def resolve_info
     info = JSON.parse(open(url).read)
@@ -20,13 +16,5 @@ class Bukin::BukkitDl
 
   def url
     "#{data[:bukkit_dl]}/api/1.0/downloads/projects/#{name}/view/#{version}/"
-  end
-
-  def name
-    data[:name]
-  end
-
-  def version
-    data[:version] || 'latest-rb'
   end
 end

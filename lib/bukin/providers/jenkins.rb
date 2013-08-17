@@ -1,17 +1,14 @@
 require 'json'
 
 # Api for downloading from jenkins
-class Bukin::Jenkins
-  attr_reader :data
-
-  def initialize(data)
-    @data = data
-  end
+class Bukin::Jenkins < Provider
+  DEFAULT_VERSION = 'lastSuccessfulBuild'
 
   def resolve_info
     unless /^build-(.*)$/.match(version)
       raise Bukin::InstallError, "The plugin #{name} (#{version}) has an improper version format for downloading from Jenkins.  It should be in the form of 'build-<number>'"
     end
+    data[:build] = $1
 
     info = JSON.parse(open(url).read)
 
@@ -25,16 +22,9 @@ class Bukin::Jenkins
     "#{base_path}/api/json"
   end
 
+private
   def base_path
-    "#{data[:jenkins]}/job/#{name}/#{$1}"
-  end
-
-  def name
-    data[:name]
-  end
-
-  def version
-    data[:version] || 'lastSuccessfulBuild'
+    "#{data[:jenkins]}/job/#{name}/#{data[:build]}"
   end
 
   def find_file(artifacts, file_name)
