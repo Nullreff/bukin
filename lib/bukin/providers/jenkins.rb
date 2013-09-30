@@ -1,7 +1,8 @@
 require 'json'
+require 'bukin/providers/provider'
 
 # Api for downloading from jenkins
-class Bukin::Jenkins < Provider
+class Bukin::Jenkins < Bukin::Provider
   DEFAULT_VERSION = 'lastSuccessfulBuild'
 
   def resolve_info
@@ -37,5 +38,9 @@ private
         true
       end
     end
+  end
+
+  def default_version
+    DEFAULT_VERSION
   end
 end

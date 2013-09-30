@@ -1,8 +1,9 @@
 require 'json'
+require 'bukin/providers/provider'
 
 # Bukkit download api
 # Docs: http://dl.bukkit.org/about/
-class Bukin::BukkitDl < Provider
+class Bukin::BukkitDl < Bukin::Provider
   DEFAULT_URL = 'http://dl.bukkit.org'
   DEFAUTL_VERSION = 'latest-rb'
 
@@ -16,5 +17,9 @@ class Bukin::BukkitDl < Provider
 
   def url
     "#{data[:bukkit_dl]}/api/1.0/downloads/projects/#{name}/view/#{version}/"
+  end
+
+  def default_version
+    DEFAUTL_VERSION
   end
 end

@@ -1,6 +1,6 @@
 require 'json'
 
-class Provider
+class Bukin::Provider
   attr_reader :data
 
   def initialize(data)
@@ -12,6 +12,6 @@ class Provider
   end
 
   def version
-    data[:version] || DEFAULT_VERSION
+    data[:version] || default_version
   end
 end
