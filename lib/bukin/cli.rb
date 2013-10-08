@@ -48,8 +48,13 @@ private
     final_resources = []
 
     raw_resources.each do |resource|
+      if resource[:download]
+        final_resources << resource
+        next
+      end
+
       name, provider = PROVIDERS.find {|name, p| resource[name]}
-      next unless name
+      raise Bukin::BukinError, "Provider not found for #{resource[:name]}" unless name
 
       url = resource[name]
       downloads[url] ||= []
