@@ -3,6 +3,14 @@ require 'json'
 class Bukin::Provider
   attr_reader :data
 
+  def self.default_version(version)
+    @@default_version = version
+  end
+
+  def self.default_url(url)
+    @@default_url = url
+  end
+
   def initialize(data)
     @data = data
   end
@@ -12,6 +20,6 @@ class Bukin::Provider
   end
 
   def version
-    data[:version] || default_version
+    data[:version] || @@default_version
   end
 end

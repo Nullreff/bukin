@@ -3,7 +3,7 @@ require 'bukin/providers/provider'
 
 # Api for downloading from jenkins
 class Bukin::Jenkins < Bukin::Provider
-  DEFAULT_VERSION = 'lastSuccessfulBuild'
+  default_version 'lastSuccessfulBuild'
 
   def resolve_info
     unless /^build-(.*)$/.match(version)
@@ -11,6 +11,8 @@ class Bukin::Jenkins < Bukin::Provider
     end
     data[:build] = $1
 
+    base_path = "#{data[:jenkins]}/job/#{name}/#{data[:build]}"
+    url = "#{base_path}/api/json"
     info = JSON.parse(open(url).read)
 
     download_info = find_file(info['artifacts'], data[:file])
@@ -19,15 +21,7 @@ class Bukin::Jenkins < Bukin::Provider
     data
   end
 
-  def url
-    "#{base_path}/api/json"
-  end
-
 private
-  def base_path
-    "#{data[:jenkins]}/job/#{name}/#{data[:build]}"
-  end
-
   def find_file(artifacts, file_name)
     artifacts.find do |artifact|
       if file_name.is_a?(Regexp)
@@ -38,9 +32,5 @@ private
         true
       end
     end
-  end
-
-  def default_version
-    DEFAULT_VERSION
   end
 end
