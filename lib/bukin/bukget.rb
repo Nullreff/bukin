@@ -5,8 +5,9 @@ module Bukin
   # BukGet api
   # Docs: http://bukget.org/pages/docs/API3.html
   class Bukget < Provider
-    self.default_url = 'http://api.bukget.org'
-    self.default_version = 'latest'
+    @name = :bukget
+    @default_url = 'http://api.bukget.org'
+    @default_version = 'latest'
 
     def resolve_info
       url = "#{data[:bukget]}/3/plugins/#{CGI.escape(server)}"\

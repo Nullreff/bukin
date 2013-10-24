@@ -2,6 +2,9 @@ require 'json'
 
 module Bukin
   class Provider
+    class << self
+      attr_reader :name, :default_version, :default_url
+    end
     attr_reader :data
 
     def initialize(data)
@@ -16,8 +19,5 @@ module Bukin
       data[:version] || default_version
     end
 
-    class << self
-      attr_accessor :default_version, :default_url
-    end
   end
 end

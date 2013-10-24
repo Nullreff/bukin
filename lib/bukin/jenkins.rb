@@ -3,7 +3,8 @@ require 'json'
 module Bukin
   # Api for downloading from jenkins
   class Jenkins < Provider
-    self.default_version = 'lastSuccessfulBuild'
+    @name = :jenkins
+    @default_version = 'lastSuccessfulBuild'
 
     def resolve_info
       unless /^build-(.*)$/.match(version)

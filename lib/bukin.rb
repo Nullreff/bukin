@@ -10,7 +10,7 @@ module Bukin
     :download => nil
   }
 
-  RESOURCES = {
+  DEFAULT_PROVIDERS = {
     :server => :bukkit_dl,
     :plugin => :bukget
   }

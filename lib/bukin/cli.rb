@@ -49,20 +49,12 @@ module Bukin
 
         # If this resource doesn't have a provider, we assign a default
         unless name
-          case resource[:type]
-          when :server
-            name = :bukkit_dl
-            provider = PROVIDERS[:bukkit_dl]
-            resource[:bukkit_dl] = provider.default_url
-          when :plugin
-            name = :bukget
-            provider = PROVIDERS[:bukget]
-            resource[:bukget] = provider.default_url
-          else
-            raise Bukin::BukinError, 
-              "The #{resource[:type].to_s} '#{resource[:name]}' "\
-              "is missing a provider"
-          end
+          name = DEFAULT_PROVIDERS[resource[:type]]
+          raise Bukin::BukinError,
+            "The #{resource[:type].to_s} '#{resource[:name]}' "\
+            "is missing a provider"
+          provider = PROVIDERS[name]
+          resource[name] = provider.default_url
         end
 
         if provider
