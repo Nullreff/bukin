@@ -70,22 +70,6 @@ describe Bukin::Bukfile do
     end
   end
 
-  it "adds a server with the correct provider" do
-    bukfile = Bukin::Bukfile.new do
-      server 'resource_name'
-    end
-
-    bukfile.resources.first[:bukkit_dl].should == Bukin::BukkitDl::DEFAULT_URL
-  end
-
-  it "adds a plugin with the correct provider" do
-    bukfile = Bukin::Bukfile.new do
-      plugin 'resource_name'
-    end
-
-    bukfile.resources.first[:bukget].should == Bukin::Bukget::DEFAULT_URL
-  end
-
   it 'adds both plugins and servers' do
     bukfile = Bukin::Bukfile.new do
       server 'craftbukkit'

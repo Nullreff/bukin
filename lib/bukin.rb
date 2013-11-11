@@ -3,21 +3,33 @@ require 'bukin/cli'
 require 'socket'
 
 module Bukin
-  PROVIDERS = {
-    :bukkit_dl => Bukin::BukkitDl,
-    :bukget => Bukin::Bukget,
-    :jenkins => Bukin::Jenkins,
-    :download => nil
-  }
-
-  DEFAULT_PROVIDERS = {
-    :server => :bukkit_dl,
-    :plugin => :bukget
-  }
-
   class BukinError < StandardError; end
   class BukfileError < BukinError; end
   class InstallError < BukinError; end
+
+  class VersionError < BukinError
+    def initialize(name, bad_version, good_version)
+      super("The resource #{name} (#{bad_version}) has an improper version. "\
+            "It should be in the form of #{good_version}")
+    end
+  end
+
+  class NoDownloadError < BukinError
+    def initialize(name, version)
+      super("The resource '#{name}' has no available downloads listed with "\
+            "the version '#{version}'")
+    end
+  end
+
+  def self.get_json(url)
+    JSON.parse(open(url).read)
+  end
+
+  def self.try_get_json(url)
+    get_json(url)
+  rescue OpenURI::HTTPError
+    nil
+  end
 
   def self.with_friendly_errors
     yield

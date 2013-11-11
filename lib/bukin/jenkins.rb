@@ -1,38 +1,35 @@
 require 'json'
+require 'cgi'
 
 module Bukin
   # Api for downloading from jenkins
-  class Jenkins < Provider
-    @name = :jenkins
-    @default_version = 'lastSuccessfulBuild'
+  class Jenkins
+    LATEST = 'lastSuccessfulBuild'
+    GOOD_VERSIONS = "'125' or '#{LATEST}'"
 
-    def resolve_info
-      unless /^build-(.*)$/.match(version)
-        raise Bukin::InstallError, "The plugin #{name} (#{version}) has an improper version format for downloading from Jenkins.  It should be in the form of 'build-<number>'"
-      end
-      data[:build] = $1
-
-      base_path = "#{data[:jenkins]}/job/#{name}/#{data[:build]}"
-      url = "#{base_path}/api/json"
-      info = JSON.parse(open(url).read)
-
-      download_info = find_file(info['artifacts'], data[:file])
-      data[:version] = version
-      data[:download] = "#{base_path}/artifact/#{download_info['relativePath']}"
-      data
+    def initialize(url)
+      @url = url
     end
 
-  private
-    def find_file(artifacts, file_name)
-      artifacts.find do |artifact|
-        if file_name.is_a?(Regexp)
-          file_name =~ artifact['fileName']
-        elsif file_name.is_a?(String)
-          file_name == artifact['fileName']
-        else
-          true
-        end
+    def find_resource(name, version = LATEST, match = FileMatch.any)
+      unless self.class.correct_version_format?(version)
+        raise VersionError.new(name, version, GOOD_VERSIONS)
       end
+
+      base_path = "#{@url}/job/#{CGI.escape(name)}/#{CGI.escape(build)}"
+
+      info = Bukin.try_get_json("#{base_path}/api/json")
+      raise NoDownloadError.new(name, version) unless info 
+
+      download_info = info['artifacts'].find{|file| match =~ file['fileName']}
+      raise NoDownloadError.new(name, version) unless download_info
+
+      download = "#{base_path}/artifact/#{download_info['relativePath']}"
+      Resource.new(name, info['number'], download)
+    end
+
+    def self.correct_version_format?(version)
+      version == LATEST || /^[0-9]+$/.match(version)
     end
   end
 end

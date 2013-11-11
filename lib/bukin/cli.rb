@@ -3,7 +3,6 @@ require 'open-uri'
 require 'bukin'
 require 'bukin/installer'
 require 'bukin/bukfile'
-require 'bukin/provider'
 require 'bukin/bukget'
 require 'bukin/bukkit_dl'
 require 'bukin/jenkins'
@@ -45,17 +44,6 @@ module Bukin
       final_resources = []
 
       raw_resources.each do |resource|
-        name, provider = PROVIDERS.find {|n, p| resource[n]}
-
-        # If this resource doesn't have a provider, we assign a default
-        unless name
-          name = DEFAULT_PROVIDERS[resource[:type]]
-          raise Bukin::BukinError,
-            "The #{resource[:type].to_s} '#{resource[:name]}' "\
-            "is missing a provider"
-          provider = PROVIDERS[name]
-          resource[name] = provider.default_url
-        end
 
         if provider
           # If the provider is set, we add it to the list of resources that
