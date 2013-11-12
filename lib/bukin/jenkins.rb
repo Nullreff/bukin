@@ -1,5 +1,6 @@
 require 'json'
 require 'cgi'
+require 'bukin/file_match'
 
 module Bukin
   # Api for downloading from jenkins

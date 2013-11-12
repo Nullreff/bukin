@@ -1,17 +1,9 @@
+require 'bukin/bukkit_dl'
+require 'bukin/bukget'
+require 'bukin/jenkins'
+
 module Bukin
   Resource = Struct.new(:name, :version, :download)
-
-  PROVIDERS = {
-    :bukkit_dl => Bukin::BukkitDl,
-    :bukget => Bukin::Bukget,
-    :jenkins => Bukin::Jenkins,
-    :download => nil
-  }
-
-  DEFAULT_PROVIDERS = {
-    :server => :bukkit_dl,
-    :plugin => :bukget
-  }
 
   def create(data)
     name, provider = PROVIDERS.find {|n, p| resource[n]}

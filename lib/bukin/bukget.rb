@@ -1,5 +1,7 @@
 require 'json'
 require 'cgi'
+require 'bukin/file_match'
+require 'bukin/resource'
 
 module Bukin
   # BukGet api
@@ -22,14 +24,14 @@ module Bukin
 
       versions = info['versions']
 
-      if versions.empty?
+      if versions.nil? || versions.empty?
         # A couple of plugins don't update the 'version' field correctly but
         # do update the 'dbo_version' field.  This attempts to find a
         # downloadable version with the correct 'dbo_version' field
         info = Bukin.get_json("#{@url}/3/plugins/#{CGI.escape(@server)}/"\
                               "#{CGI.escape(name)}")
-        versions = info['versions'].select do |version_data|
-          version_data['dbo_version'] == version
+        versions = info['versions'].select do |data|
+          data['dbo_version'] == version
         end
 
         raise NoDownloadError.new(name, version) if versions.empty?
@@ -38,11 +40,11 @@ module Bukin
       # Some people release two of the same version on bukkit dev,
       # one as a zip package and one with the jar only.
       # This downloads the jar only version by default.
-      version_data = versions.find do |version_data|
-        File.extname(version_data['filename']) == '.jar'
+      version_data = versions.find do |data|
+        File.extname(data['filename']) == '.jar'
       end || versions.first
 
-      Resource.net(name, version_data['version'], version_data['download'])
+      Resource.new(name, version_data['version'], version_data['download'])
     end
   end
 end
