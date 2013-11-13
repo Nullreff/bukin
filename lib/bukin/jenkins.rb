@@ -17,7 +17,7 @@ module Bukin
         raise VersionError.new(name, version, GOOD_VERSIONS)
       end
 
-      base_path = "#{@url}/job/#{CGI.escape(name)}/#{CGI.escape(build)}"
+      base_path = "#{@url}/job/#{CGI.escape(name)}/#{CGI.escape(version)}"
 
       info = Bukin.try_get_json("#{base_path}/api/json")
       raise NoDownloadError.new(name, version) unless info 
