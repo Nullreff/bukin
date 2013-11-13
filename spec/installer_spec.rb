@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'bukin'
 require 'bukin/installer'
-require 'bukin/exceptions'
 
 describe Bukin::Installer do
   describe :get_match do
