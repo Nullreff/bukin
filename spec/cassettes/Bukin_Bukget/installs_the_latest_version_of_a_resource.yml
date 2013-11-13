@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.bukget.org/3/plugins/bukkit/worldedit/release
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.0.15
+      Date:
+      - Wed, 13 Nov 2013 13:47:22 GMT
+      Content-Type:
+      - application/json
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - ! '*'
+      Content-Length:
+      - '4988'
+    body:
+      encoding: US-ASCII
+      string: ! '{"website": "http://dev.bukkit.org/bukkit-plugins/worldedit", "dbo_page":
+        "http://dev.bukkit.org/bukkit-plugins/worldedit", "description": "", "logo_full":
+        "http://dev.bukkit.org/media/images/44/684/curse_we.png", "versions": [{"status":
+        "Semi-normal", "commands": [], "changelog": "PGRpdiBjbGFzcz0iY29udGVudC1ib3gtaW5uZXIiPgo8aDM+CiBDaGFuZ2UgbG9nCjwvaDM+Cjxi\nbG9ja3F1b3RlPgogPGNpdGU+CiAgUXVvdGU6CiA8L2NpdGU+CiA8cD4KICA8c3BhbiBzdHlsZT0i\nZm9udC1zaXplOjEzMC4wJSI+CiAgIDxzdHJvbmc+CiAgICBQcm90ZWN0IHlvdXIgc2VydmVyIQog\nICA8L3N0cm9uZz4KICA8L3NwYW4+CiAgV29ybGRFZGl0IGFsc28gd29ya3Mgd2l0aAogIDxhIGhy\nZWY9Imh0dHA6Ly9kZXYuYnVra2l0Lm9yZy9zZXJ2ZXItbW9kcy93b3JsZGd1YXJkLyI+CiAgIFdv\ncmxkR3VhcmQKICA8L2E+CiAgLgogPC9wPgogPHA+CiAgPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTox\nMzAuMCUiPgogICA8c3Ryb25nPgogICAgV2FudCB0aGUgd2FycHM/IGhvbWVzPyBiYXNpY3M/CiAg\nIDwvc3Ryb25nPgogIDwvc3Bhbj4KICBUcnkKICA8YSBocmVmPSJodHRwOi8vZGV2LmJ1a2tpdC5v\ncmcvc2VydmVyLW1vZHMvY29tbWFuZGJvb2svIj4KICAgQ29tbWFuZEJvb2sKICA8L2E+CiAgLgog\nPC9wPgogPHA+CiAgPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMzAuMCUiPgogICA8c3Ryb25nPgog\nICAgTWFrZSB5b3VyIHNlcnZlciBldmVuIG1vcmUgZnVuIQogICA8L3N0cm9uZz4KICA8L3NwYW4+\nCiAgR2l2ZQogIDxhIGhyZWY9Imh0dHA6Ly9kZXYuYnVra2l0Lm9yZy9zZXJ2ZXItbW9kcy9jcmFm\ndGJvb2svIj4KICAgQ3JhZnRCb29rCiAgPC9hPgogIGEgdHJ5IQogPC9wPgo8L2Jsb2NrcXVvdGU+\nCjxwPgogPHN0cm9uZz4KICBDaGFuZ2VzIGluIHY1LjUuODoKIDwvc3Ryb25nPgo8L3A+Cjx1bD4K\nIDxsaT4KICBVcGRhdGUgZm9yIE1pbmVjcmFmdCAxLjYuMiBhbmQgMS42LjQKIDwvbGk+CiA8bGk+\nCiAgTWFkZSBnZW5lcmF0aW9uIGNvbW1hbmRzIHJlc3BlY3QgbWF4LXJhZGl1cyBjb25maWcgc2V0\ndGluZwogPC9saT4KIDxsaT4KICBGaXhlZCB1c2UtaW52ZW50b3J5IG92ZXJyaWRlcyBub3QgYmVp\nbmcgYXBwbGllZCBpbiBjZXJ0YWluIGNhc2VzCiA8L2xpPgogPGxpPgogIE1hZGUKICA8Y29kZT4K\nICAgLy9tb3ZlCiAgPC9jb2RlPgogIHdvcmsgd2l0aCBub24tY3Vib2lkIHJlZ2lvbnMKIDwvbGk+\nCiA8bGk+CiAgQWRkZWQgYSBjb252ZXggcG9seWhlZHJvbiBzZWxlY3RvcgogPC9saT4KIDxsaT4K\nICBNYWRlIGNsaXBib2FyZCB3b3JrIHdpdGggbm9uLWN1Ym9pZCByZWdpb25zCiA8L2xpPgo8L3Vs\nPgo8cD4KIDxzdHJvbmc+CiAgQ2hhbmdlcyBpbiB2NS41Ljc6CiA8L3N0cm9uZz4KPC9wPgo8dWw+\nCiA8bGk+CiAgVXBkYXRlZCBmb3IgTWluZWNyYWZ0IDEuNiAoYW5kIDEuNi4xKQogPC9saT4KIDxs\naT4KICBGaXhlZCBhIGJ1ZyB3aXRoIEdyb3VwTWFuYWdlciBkZXRlY3Rpb24uCiA8L2xpPgogPGxp\nPgogIEFkZGVkIGEgY29vcmRpbmF0ZSBhcmd1bWVudCBmb3IKICA8Y29kZT4KICAgLy9jaHVuawog\nIDwvY29kZT4KICAuCiA8L2xpPgogPGxpPgogIEFsbG93ZWQgY3ljbGluZGVyIHNlbGVjdG9yIHRv\nIGJ5IGNoYW5nZWQgdG8gYSByb3VnaCBwb2x5Z29uLgogPC9saT4KPC91bD4KPHA+CiA8c3Ryb25n\nPgogIENoYW5nZXMgaW4gdjUuNS42OgogPC9zdHJvbmc+CjwvcD4KPHVsPgogPGxpPgogIFVwZGF0\nZWQgZm9yIE1pbmVjcmFmdCAxLjUuMi4KIDwvbGk+CiA8bGk+CiAgUGlzdG9ucyBjYW4gbm93IGJl\nIHJvdGF0ZWQgd2l0aCBjeWNsZXIgdG9vbC4KIDwvbGk+CiA8bGk+CiAgSG9wcGVycyBubyBsb25n\nZXIgbG9zZSBvcmllbnRhdGlvbi4KIDwvbGk+CiA8bGk+CiAgVXNpbmcKICA8Y29kZT4KICAgLy9z\nZXRiaW9tZQogIDwvY29kZT4KICBub3cgcmVzcGVjdHMgZ2xvYmFsIGJpb21lIG1hc2tzLgogPC9s\naT4KIDxsaT4KICBGaXhlZCBhbiBpc3N1ZSB3aXRoIGNlcnRhaW4gYmxvY2tzIHRoYXQgaGFkIG11\nbHRpcGxlIHBvc3NpYmxlIFRpbGVFbnRpdGllcy4gKG1vZHMgb25seSkKIDwvbGk+CiA8bGk+CiAg\nQWRkZWQgY29uc29sZSBzdXBwb3J0IGZvciAvcmVtb3ZlIGNvbW1hbmQuIChyZW1vdmVzIGZyb20g\nQUxMIHdvcmxkcykuCiA8L2xpPgo8L3VsPgo8cD4KIDxzdHJvbmc+CiAgQ2hhbmdlcyBpbiB2NS41\nLjU6CiA8L3N0cm9uZz4KPC9wPgo8dWw+CiA8bGk+CiAgQWRkZWQgY29tcGF0aWJpbGl0eSBmb3Ig\nQ3JhZnRCdWtraXQgYnVpbGRzIHJ1bm5pbmcgTUMgMS41LjEuCiA8L2xpPgo8L3VsPgo8cD4KIDxz\ndHJvbmc+CiAgQ2hhbmdlcyBpbiB2NS41LjQ6CiA8L3N0cm9uZz4KPC9wPgo8dWw+CiA8bGk+CiAg\nRml4ZWQgYSBidWcgY2F1c2VkIGJ5IE1DIDEuNSB3aGVyZSBibG9jayB1cGRhdGVzIHdlcmUgbm90\nIGJlaW5nIHNlbnQuCiA8L2xpPgo8L3VsPgo8cD4KIDxzdHJvbmc+CiAgQ2hhbmdlcyBpbiB2NS41\nLjM6CiA8L3N0cm9uZz4KPC9wPgo8dWw+CiA8bGk+CiAgVXBkYXRlZCBXb3JsZEVkaXQgdG8gbm90\nIGNyYXNoIGR1ZSB0byB0aGUgbWluZWNhcnQgQVBJIGNoYW5nZS4KIDwvbGk+CjwvdWw+CjxwPgog\nPHN0cm9uZz4KICBDaGFuZ2VzIGluIHY1LjUuMjoKIDwvc3Ryb25nPgo8L3A+Cjx1bD4KIDxsaT4K\nICBVcGRhdGUgdG8gTWluZUNyYWZ0IDEuNS4KIDwvbGk+CiA8bGk+CiAgRml4ZWQKICA8Y29kZT4K\nICAgLy9mbGlwCiAgPC9jb2RlPgogIGdvaW5nIHRoZSB3cm9uZyBkaXJlY3Rpb24gaW4gY2VydGFp\nbiBjYXNlcy4KIDwvbGk+CiA8bGk+CiAgRml4ZWQgNDA5NiBibG9jayBpZCBzdXBwb3J0IGluIHNj\naGVtYXRpY3MgYW5kIHNuYXBzaG90cy4KIDwvbGk+CiA8bGk+CiAgRml4ZWQgbWF4LWJsb2Nrcy1j\naGFuZ2VkIG5vdCBiZWluZyB1c2VkLgogPC9saT4KPC91bD4KPC9kaXY+\n",
+        "game_versions": ["1.6.2", "1.6.1", "1.5.2"], "filename": "worldedit-5.5.8.zip",
+        "hard_dependencies": [], "date": 1379771255, "version": "5.5.8", "link": "http://dev.bukkit.org/bukkit-plugins/worldedit/files/45-world-edit-5-5-8/",
+        "md5": "a18bb5a577b59c587a4d551b1f8a1ff5", "download": "http://dev.bukkit.org/media/files/739/932/worldedit-5.5.8.zip",
+        "dbo_version": "5.5.8", "type": "Release", "slug": "45-world-edit-5-5-8",
+        "soft_dependencies": [], "permissions": []}], "popularity": {"monthly": 258,
+        "daily": 230, "weekly": 237}, "plugin_name": "WorldEdit", "server": "bukkit",
+        "authors": ["sk89q"], "logo": "http://dev.bukkit.org/thumbman/images/44/684/98x100/curse_we.png.-m1.png",
+        "main": "com.sk89q.worldedit.bukkit.WorldEditPlugin", "slug": "worldedit",
+        "categories": ["World Editing and Management", "Admin Tools", "Anti-Griefing
+        Tools", "Informational", "Teleportation"], "stage": "Release"}'
+    http_version: 
+  recorded_at: Wed, 13 Nov 2013 13:47:22 GMT
+recorded_with: VCR 2.7.0

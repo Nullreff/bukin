@@ -1,0 +1,43 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.bukget.org/3/plugins/bukkit/missing-name/release
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx/1.0.15
+      Date:
+      - Wed, 13 Nov 2013 13:47:23 GMT
+      Content-Type:
+      - text/html; charset=UTF-8
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '760'
+    body:
+      encoding: US-ASCII
+      string: ! "\n    <!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n    <html>\n
+        \       <head>\n            <title>Error: 404 Not Found</title>\n            <style
+        type=\"text/css\">\n              html {background-color: #eee; font-family:
+        sans;}\n              body {background-color: #fff; border: 1px solid #ddd;\n
+        \                   padding: 15px; margin: 15px;}\n              pre {background-color:
+        #eee; border: 1px solid #ddd; padding: 5px;}\n            </style>\n        </head>\n
+        \       <body>\n            <h1>Error: 404 Not Found</h1>\n            <p>Sorry,
+        the requested URL <tt>&#039;http://paris.api.bukget.org/3/plugins/bukkit/missing-name/release&#039;</tt>\n
+        \              caused an error:</p>\n            <pre>Plugin Does Not Exist</pre>\n
+        \       </body>\n    </html>\n"
+    http_version: 
+  recorded_at: Wed, 13 Nov 2013 13:47:23 GMT
+recorded_with: VCR 2.7.0

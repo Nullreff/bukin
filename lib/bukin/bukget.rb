@@ -17,6 +17,9 @@ module Bukin
     end
 
     def find_resource(name, version = VERSION, match = FileMatch.any)
+      raise "Name is nil" if name.nil?
+      raise "Version is nil" if version.nil?
+
       info = Bukin.try_get_json("#{@url}/3/plugins/#{CGI.escape(@server)}/"\
                             "#{CGI.escape(name)}/#{CGI.escape(version)}")
 

@@ -26,7 +26,7 @@ module Bukin
       raise NoDownloadError.new(name, version) unless download_info
 
       download = "#{base_path}/artifact/#{download_info['relativePath']}"
-      Resource.new(name, info['number'], download)
+      Resource.new(name, info['number'].to_s, download)
     end
 
     def self.correct_version_format?(version)

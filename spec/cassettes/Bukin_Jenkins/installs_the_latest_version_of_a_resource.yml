@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://ci.md-5.net/job/spigot/lastSuccessfulBuild/api/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - cloudflare-nginx
+      Date:
+      - Wed, 13 Nov 2013 13:34:28 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=ddb8735198bef7856bc72cac724508e711384349668679; expires=Mon, 23-Dec-2019
+        23:50:00 GMT; path=/; domain=.md-5.net; HttpOnly
+      X-Jenkins:
+      - '1.533'
+      X-Jenkins-Session:
+      - e5616afa
+      X-Powered-By:
+      - Servlet/2.5 (Winstone/0.9.10)
+      Cf-Ray:
+      - ccbd6f536ba0502
+    body:
+      encoding: US-ASCII
+      string: ! '{"actions":[{"causes":[{"shortDescription":"Started by GitHub push
+        by md-5"}]},{},{"buildsByBranchName":{"origin/master":{"buildNumber":1136,"buildResult":null,"revision":{"SHA1":"cdbe22b7c79b516e2741d2aead1555891bb1603c","branch":[{"SHA1":"cdbe22b7c79b516e2741d2aead1555891bb1603c","name":"origin/master"}]}}},"lastBuiltRevision":{"SHA1":"cdbe22b7c79b516e2741d2aead1555891bb1603c","branch":[{"SHA1":"cdbe22b7c79b516e2741d2aead1555891bb1603c","name":"origin/master"}]},"remoteUrls":["https://github.com/SpigotMC/Spigot.git"],"scmName":""},{},{},{"failCount":0,"skipCount":3,"totalCount":5159,"urlName":"testReport"},{},{"level":null,"levelValue":0}],"artifacts":[{"displayPath":"spigot-1.6.4-R2.1-SNAPSHOT.jar","fileName":"spigot-1.6.4-R2.1-SNAPSHOT.jar","relativePath":"Spigot-Server/target/spigot-1.6.4-R2.1-SNAPSHOT.jar"},{"displayPath":"spigot.jar","fileName":"spigot.jar","relativePath":"Spigot-Server/target/spigot.jar"}],"building":false,"description":null,"duration":75160,"estimatedDuration":72188,"executor":null,"fullDisplayName":"Spigot
+        #1136","id":"2013-11-04_18-24-23","keepLog":false,"number":1136,"result":"SUCCESS","timestamp":1383607463000,"url":"http://ci.md-5.net/job/spigot/1136/","builtOn":"","changeSet":{"items":[{"affectedPaths":["Bukkit","Bukkit-Patches/0001-POM-Changes.patch","CraftBukkit-Patches/0001-POM-Changes.patch","CraftBukkit","CraftBukkit-Patches/0043-Do-Not-Search-for-Offline-Players.patch","CraftBukkit-Patches/0033-Close-Unloaded-Save-Files.patch","CraftBukkit-Patches/0047-Allow-Disabling-of-Command-TabComplete.patch"],"commitId":"cdbe22b7c79b516e2741d2aead1555891bb1603c","timestamp":1383608794000,"author":{"absoluteUrl":"http://ci.md-5.net/user/md_5","fullName":"md_5"},"comment":"Update
+        master to R2 as well.\n","date":"2013-11-04 18:46:34 +1100","id":"cdbe22b7c79b516e2741d2aead1555891bb1603c","msg":"Update
+        master to R2 as well.","paths":[{"editType":"edit","file":"CraftBukkit-Patches/0001-POM-Changes.patch"},{"editType":"edit","file":"Bukkit-Patches/0001-POM-Changes.patch"},{"editType":"edit","file":"CraftBukkit-Patches/0033-Close-Unloaded-Save-Files.patch"},{"editType":"edit","file":"Bukkit"},{"editType":"edit","file":"CraftBukkit-Patches/0043-Do-Not-Search-for-Offline-Players.patch"},{"editType":"edit","file":"CraftBukkit-Patches/0047-Allow-Disabling-of-Command-TabComplete.patch"},{"editType":"edit","file":"CraftBukkit"}]}],"kind":"git"},"culprits":[{"absoluteUrl":"http://ci.md-5.net/user/md_5","fullName":"md_5"}],"mavenArtifacts":null,"mavenVersionUsed":"3.0.4"}'
+    http_version: 
+  recorded_at: Wed, 13 Nov 2013 13:34:28 GMT
+recorded_with: VCR 2.7.0
