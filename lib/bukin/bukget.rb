@@ -16,9 +16,10 @@ module Bukin
       @server = server
     end
 
-    def find_resource(name, version = VERSION, match = FileMatch.any)
-      raise "Name is nil" if name.nil?
-      raise "Version is nil" if version.nil?
+    def find_resource(name, version = nil, match = nil)
+      raise 'You must provide a name when installing from bukget' if name.nil?
+      version ||= VERSION
+      match = match ? FileMatch.new(match) : FileMatch.any
 
       info = Bukin.try_get_json("#{@url}/3/plugins/#{CGI.escape(@server)}/"\
                             "#{CGI.escape(name)}/#{CGI.escape(version)}")
@@ -40,14 +41,21 @@ module Bukin
         raise NoDownloadError.new(name, version) if versions.empty?
       end
 
+      # Filter out any plugins that don't match our file name
+      versions = versions.select{|data| match =~ data['filename']}
+
       # Some people release two of the same version on bukkit dev,
       # one as a zip package and one with the jar only.
       # This downloads the jar only version by default.
-      version_data = versions.find do |data|
-        File.extname(data['filename']) == '.jar'
-      end || versions.first
+      version_data = versions.find {|data| jar_filename(data)} || versions.first
+      raise NoDownloadError.new(name, version) unless version_data
 
       Resource.new(name, version_data['version'], version_data['download'])
+    end
+
+  private
+    def jar_filename(data)
+        File.extname(data['filename']) == '.jar'
     end
   end
 end

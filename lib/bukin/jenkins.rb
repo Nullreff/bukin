@@ -12,8 +12,11 @@ module Bukin
       @url = url
     end
 
-    def find_resource(name, version = LATEST, match = FileMatch.any)
-      unless self.class.correct_version_format?(version)
+    def find_resource(name, version = nil, match = nil)
+      version ||= LATEST
+      match = match ? FileMatch.new(match) : FileMatch.any
+
+      unless correct_version_format?(version)
         raise VersionError.new(name, version, GOOD_VERSIONS)
       end
 
@@ -29,7 +32,8 @@ module Bukin
       Resource.new(name, info['number'].to_s, download)
     end
 
-    def self.correct_version_format?(version)
+  private
+    def correct_version_format?(version)
       version == LATEST || /^[0-9]+$/.match(version)
     end
   end
