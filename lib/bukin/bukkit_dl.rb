@@ -8,18 +8,20 @@ module Bukin
     VERSION = 'latest-rb'
     URL = 'http://dl.bukkit.org'
     GOOD_VERSIONS = "'latest', 'latest-rb', 'latest-beta', 'latest-dev', "\
-                   "'git-0fd25c4' or 'build-2912'"
+                    "'git-0fd25c4' or 'build-2912'"
 
     def initialize(url = URL)
       @url = url
     end
 
-    def find_resource(name, version = VERSION)
-      unless self.class.correct_version_format?(version)
+    def find_resource(name, version = nil)
+      version ||= VERSION
+
+      unless correct_version_format?(version)
         raise VersionError.new(name, version, GOOD_VERSIONS)
       end
 
-      info = Bukget.try_get_json(
+      info = Bukin.try_get_json(
         "#{@url}/api/1.0/downloads/projects/"\
         "#{CGI.escape(name)}/view/#{CGI.escape(version)}/")
 
@@ -30,9 +32,9 @@ module Bukin
       Resource.new(name, "build-#{info['build_number']}", download)
     end
 
-    def self.correct_version_format?(version)
+    def correct_version_format?(version)
       'latest' == version ||
-      /^latest-{rb|beta|dev}$/ =~ version ||
+      /^latest-(rb|beta|dev)$/ =~ version ||
       /^git-[0-9a-f]{7,40}$/ =~ version ||
       /^build-[0-9]+$/ =~ version
     end

@@ -1,0 +1,128 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://dl.bukkit.org/api/1.0/downloads/projects/craftbukkit/view/build-0000/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: NOT FOUND
+    headers:
+      Server:
+      - nginx/1.5.7
+      Date:
+      - Fri, 22 Nov 2013 22:26:09 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      - Cookie
+      X-Ua-Compatible:
+      - IE=edge,chrome=1
+    body:
+      encoding: US-ASCII
+      string: ! "<!DOCTYPE html>\n\n\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\"
+        lang=\"en\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\"
+        lang=\"en\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-js ie8 oldie\"
+        lang=\"en\"> <![endif]-->\n<!--[if gt IE 8]><!-->\n<html class=\"no-js\" lang=\"en\">
+        <!--<![endif]-->\n    <head>\n        <meta charset=\"utf-8\">\n\n        <title>404
+        Bukkit is Empty | Bukkit</title>\n        <meta name=\"description\" content=\"Download
+        Bukkit and CraftBukkit straight from the official source!\">\n        <meta
+        name=\"author\" content=\"The Bukkit Project\">\n\n        <meta name=\"viewport\"
+        content=\"width=device-width,initial-scale=1\">\n\n        \n            <link
+        rel=\"stylesheet\" href=\"/static/CACHE/css/4b279872fb62.css\" type=\"text/css\"
+        />\n\n            <link rel=\"shortcut icon\" href=\"http://forums.bukkit.org/favicon.ico\">\n
+        \       \n\n    <script type=\"text/javascript\" src=\"/static/CACHE/js/a04a7c346fb3.js\"></script>\n
+        \   </head>\n\n    <body>\n        <div id=\"container\">\n            <div
+        id=\"wrap\">\n                <header>\n                    <div class=\"pageWidth
+        positionReset\">\n                        <a href=\"/\"><img src=\"/static/img/logo.png\"
+        width=\"400\" height=\"59\" alt=\"Bukkit logo - return to Download Bukkit
+        homepage\"></a>\n                        <ul id=\"mainTabs\">\n                            \n
+        \                               <li class=\"selected\"><a href=\"/\">Home</a></li>\n
+        \                           \n                            <li class=\"rightTab\"><a
+        href=\"http://bukkit.org\">Back to Bukkit</a></li>\n                            <li
+        class=\"rightTab\"><a href=\"http://forums.bukkit.org\">Forums</a></li>\n
+        \                       </ul>\n                        <ul id=\"subTabs\"></ul>\n
+        \                       <div id=\"searchBox\" class=\"rightTab\">\n                            <form
+        action=\"/downloads/search/\" method=\"GET\">\n                                <input
+        type=\"search\" name=\"q\" value=\"\" placeholder=\"Search...\" results=0>\n
+        \                           </form>\n                        </div>\n                    </div>\n
+        \               </header>\n                <div id=\"mainWrap\">\n                    <div
+        id=\"main\" role=\"main\">\n                        <div class=\"pageWidth
+        mainPad\">\n                            \n    <div class=\"block oneCol\">\n
+        \       <div class=\"innerContent\">\n            <h3>404 Bukkit is Empty</h3>\n
+        \           <blockquote>Unfortunately the Bukkit you were looking in is empty.
+        Please try another.</blockquote>\n            <p>The URL you tried to access
+        does not exist.</p>\n            <p>You can try:</p>\n                <ul>\n
+        \                   <li><a href=\"http://dl.bukkit.org/\">Returning to the
+        homepage</a></li>\n                </ul>\n        </div>\n    </div>\n\n                        </div>\n
+        \                   </div>\n                </div>\n            </div>\n            <footer>\n
+        \               <div class=\"pageWidth\">\n                    \n                    <ul>\n
+        \                       <li>Flexile theme by Erik Swan for XenForo, ported
+        for Bukkit. </li>\n                        <li>\n                            Are
+        you a developer? <a href=\"/about/\">Check out our API!</a>\n                            \n
+        \                       </li>\n                        <li>&copy; 2013 Bukkit
+        Project | f8889b3a74dbb549e8d069d36f569ad5ed19ba6b\n</li>\n                    </ul>\n
+        \               </div>\n            </footer>\n        </div>\n        <!--!
+        end of #container -->\n\n        <!-- scripts -->\n        <script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js\"></script>\n
+        \       <script>window.jQuery || document.write('<script src=\"/static/js/libs/jquery-1.6.2.min.js\"><\\/script>')</script>\n
+        \       <script type=\"text/javascript\" src=\"/static/CACHE/js/ca7fd643cf46.js\"></script>\n\n
+        \       <!-- Google Analytics -->\n        <script type=\"text/javascript\">\n
+        \           var _gaq = _gaq || [];\n\n            _gaq.push(\n            ['_setAccount',
+        'UA-1045810-67'],\n            ['_setDomainName', 'bukkit.org'],\n            ['_addIgnoredRef',
+        'bukkit.org'],\n            ['_trackPageview'],\n            ['b._setAccount',
+        'UA-1045810-22'],\n            ['b._setDomainName', 'bukkit.org'],\n            ['b._addIgnoredRef',
+        'bukkit.org'],\n            ['b._trackPageview'],\n            ['c._setAccount',
+        'UA-20541082-1'],\n            ['c._trackPageview'],\n            ['d._setAccount','UA-28992851-1'],\n
+        \           ['d._trackPageview'],\n            ['d._trackPageLoadTime']\n
+        \           );\n\n            (function() {\n            var ga = document.createElement('script');
+        ga.type = 'text/javascript'; ga.async = true;\n            ga.src = ('https:'
+        == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n
+        \           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga,
+        s);\n            })();\n        </script>\n        <!-- End Google Analytics
+        -->\n\n        <!-- Quantcast -->\n        <script type=\"text/javascript\">\n
+        \           var _qevents = _qevents || [];\n            (function() {\n            var
+        elem = document.createElement('script');\n            elem.src = (document.location.protocol
+        == \"https:\" ? \"https://secure\" : \"http://edge\") + \".quantserve.com/quant.js\";\n
+        \           elem.async = true;\n            elem.type = \"text/javascript\";\n
+        \           var scpt = document.getElementsByTagName('script')[0];\n            scpt.parentNode.insertBefore(elem,
+        scpt);\n            })();\n            _qevents.push({qacct: \"p-d2K9aGgyU-tIA\"});\n
+        \       </script>\n\n        <noscript>\n        <div style=\"display:none;\"><img
+        src=\"//pixel.quantserve.com/pixel/p-d2K9aGgyU-tIA.gif\" border=\"0\" height=\"1\"
+        width=\"1\" alt=\"Quantcast\" /></div>\n        </noscript>\n        <!--
+        End Quantcast -->\n\n        <!-- Begin comScore -->\n        <script>\n            var
+        _comscore = _comscore || [];\n            _comscore.push({ c1: \"2\", c2:
+        \"6035118\" });\n            (function() {\n            var s = document.createElement(\"script\"),
+        el = document.getElementsByTagName(\"script\")[0]; s.async = true;\n            s.src
+        = (document.location.protocol == \"https:\" ? \"https://sb\" : \"http://b\")
+        + \".scorecardresearch.com/beacon.js\";\n            el.parentNode.insertBefore(s,
+        el);\n            })();\n        </script>\n\n        <noscript>\n        <img
+        src=\"http://b.scorecardresearch.com/p?c1=2&amp;c2=6035118&amp;cv=2.0&amp;cj=1\"
+        />\n        </noscript>\n        <!-- End comScore -->\n\n        <!-- Nielsen
+        Online SiteCensus -->\n        <script type=\"text/javascript\">\n            (function
+        () {\n            var d = new Image(1, 1);\n            d.onerror = d.onload
+        = function () {\n            d.onerror = d.onload = null;\n            };\n\n
+        \           d.src = [\"//secure-us.imrworldwide.com/cgi-bin/m?ci=us-603339h&cg=0&cc=1&si=\",
+        escape(window.location.href), \"&rp=\", escape(document.referrer), \"&ts=compact&rnd=\",
+        (new Date()).getTime()].join('');\n            })();\n        </script>\n\n
+        \       <noscript>\n        <div><img src=\"//secure-us.imrworldwide.com/cgi-bin/m?ci=us-603339h&amp;cg=0&amp;cc=1&amp;ts=noscript\"
+        width=\"1\" height=\"1\" alt=\"\" /></div>\n        </noscript>\n        <!--
+        End Nielsen Online SiteCensus -->\n\n        <!--[if lt IE 7 ]>\n            <script
+        src=\"//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js\"></script>\n
+        \           <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>\n
+        \       <![endif]-->\n    </body>\n</html>\n"
+    http_version: 
+  recorded_at: Fri, 22 Nov 2013 22:26:09 GMT
+recorded_with: VCR 2.7.0

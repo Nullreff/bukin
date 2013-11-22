@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://dl.bukkit.org/api/1.0/downloads/projects/craftbukkit/view/build-2912/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.7
+      Date:
+      - Fri, 22 Nov 2013 22:28:30 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Throttle:
+      - status=SUCCESS; next=37.24 sec
+      Expires:
+      - Fri, 22 Nov 2013 22:36:07 GMT
+      Vary:
+      - Authenticate, Accept, Cookie
+      Last-Modified:
+      - Fri, 22 Nov 2013 22:26:07 GMT
+      X-Ua-Compatible:
+      - IE=edge,chrome=1
+      Allow:
+      - GET, PUT, DELETE, HEAD, OPTIONS
+      Cache-Control:
+      - max-age=600
+    body:
+      encoding: US-ASCII
+      string: ! '{"broken_reason": "", "build_number": 2912, "created": "2013-10-24
+        05:06:12Z", "url": "/api/1.0/downloads/projects/craftbukkit/view/02381_1.6.4-R1.0/",
+        "is_broken": false, "html_url": "/downloads/craftbukkit/view/02381_1.6.4-R1.0/",
+        "project": {"name": "CraftBukkit", "github_project_url": "https://github.com/Bukkit/CraftBukkit",
+        "url": "/api/1.0/downloads/projects/craftbukkit/", "html_url": "/downloads/craftbukkit/",
+        "download_count": 18655411, "slug": "craftbukkit"}, "version": "1.6.4-R1.0",
+        "file": {"url": "/downloads/craftbukkit/get/02381_1.6.4-R1.0/craftbukkit.jar",
+        "checksum_md5": "087223b14860378d4437d1a4e2a299f3", "size": 15294671}, "commit":
+        {"ref": "0fd25c40a2337a67e3f2ceefb1860470470050b2", "html_url": ""}, "target_filename":
+        "craftbukkit.jar", "download_count": 90555, "channel": {"filename_format":
+        "%(project_slug)s.jar", "url": "/api/1.0/downloads/channels/rb/", "priority":
+        4000, "name": "Recommended Build", "slug": "rb"}}'
+    http_version: 
+  recorded_at: Fri, 22 Nov 2013 22:28:30 GMT
+recorded_with: VCR 2.7.0

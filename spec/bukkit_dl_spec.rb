@@ -1,19 +1,20 @@
 require 'spec_helper'
 require 'bukin'
 
-describe Bukin::Bukget, :vcr do
+describe Bukin::BukkitDl, :vcr do
   before do
-    @name = 'worldedit'
-    @version = '5.5.8'
-    @download = 'http://dev.bukkit.org/media/files/739/931/worldedit-5.5.8.jar'
+    @name = 'craftbukkit'
+    @version = 'build-2912'
+    @download = 'http://dl.bukkit.org/downloads/craftbukkit/get/'\
+                '02381_1.6.4-R1.0/craftbukkit.jar'
     @missing_name = 'missing-name'
-    @missing_version = '0.0.0'
+    @missing_version = 'build-0000'
     @missing_file = 'missing-file.jar'
-    @latest_version = '5.5.8'
+    @latest_version = 'build-2918'
   end
 
   it 'installs the latest version of a resource' do
-    provider = Bukin::Bukget.new
+    provider = Bukin::BukkitDl.new
     resource = provider.find_resource(@name)
 
     resource.name.should == @name
@@ -21,7 +22,7 @@ describe Bukin::Bukget, :vcr do
   end
 
   it 'installs a specific version of a resource' do
-    provider = Bukin::Bukget.new
+    provider = Bukin::BukkitDl.new
     resource = provider.find_resource(@name, @version)
 
     resource.name.should == @name
@@ -29,28 +30,21 @@ describe Bukin::Bukget, :vcr do
   end
 
   it 'returns an error when asked for a resource that doese not exist' do
-    provider = Bukin::Bukget.new
+    provider = Bukin::BukkitDl.new
     expect do
       provider.find_resource(@missing_name)
     end.to raise_error(Bukin::NoDownloadError)
   end
 
   it 'returns an error when asked for a version that doese not exist' do
-    provider = Bukin::Bukget.new
+    provider = Bukin::BukkitDl.new
     expect do
       provider.find_resource(@name, @missing_version)
     end.to raise_error(Bukin::NoDownloadError)
   end
 
-  it 'returns an error when asked for a file that does not exist' do
-    provider = Bukin::Bukget.new
-    expect do
-      provider.find_resource(@name, @version, @missing_file)
-    end.to raise_error(Bukin::NoDownloadError)
-  end
-
-  it 'chooses the version with a .jar file when there are multiple versions' do
-    provider = Bukin::Bukget.new
+  it 'chooses the first file when there are multiple files' do
+    provider = Bukin::BukkitDl.new
     resource = provider.find_resource(@name, @version)
 
     resource.download.should == @download
