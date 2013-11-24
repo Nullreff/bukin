@@ -24,7 +24,7 @@ module Bukin
       elsif search.is_a? ::Regexp
         search =~ file_name
       elsif search.respond_to? :any?
-        search.any? {|item| match_helper(item)}
+        search.any? {|item| match_helper(item, file_name)}
       else
         false
       end
