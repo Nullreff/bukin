@@ -1,5 +1,5 @@
 require 'bukin/lockfile'
-require 'zip/zip'
+require 'zip'
 
 module Bukin
   class Installer
@@ -31,7 +31,7 @@ module Bukin
         tempfile.write(file_data)
         tempfile.close
 
-        Zip::ZipFile.open(tempfile.path) do |zipfile|
+        Zip::File.open(tempfile.path) do |zipfile|
           files = zipfile.find_all {|file| file.name =~ match}
           files.each do |file|
             file.extract(File.join(path, file.name)) { true }
