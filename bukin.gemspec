@@ -19,6 +19,5 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 1.9.1'
   gem.add_dependency('thor', '~> 0.18.1')
-  gem.add_dependency('json', '~> 1.8.0')
   gem.add_dependency('rubyzip', '~> 1.1.0')
 end
