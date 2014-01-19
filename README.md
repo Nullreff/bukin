@@ -87,3 +87,12 @@ Need something custom?  Use the `download` option.  Version is optional but will
 
     plugin 'mycustomplugin', '2.4', download: 'http://example.com/My-Custom-Plugin.jar'
 
+When installing, the entire Bukfile is evaluated as ruby code.  This means that you can do just about anything with it.  For instance, if you wanted to conditionally install spigot if the file `spigot.yml` exists, you could do
+
+    if File.exist? 'spigot.yml'
+      server 'spigot', jenkins: 'http://ci.md-5.net'
+    else
+      server 'craftbukkit'
+    end
+
+Just make sure that you read and trust it any Bukfile you download before running `bukin install`.
