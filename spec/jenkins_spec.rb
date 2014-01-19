@@ -14,7 +14,7 @@ describe Bukin::Jenkins, :vcr do
     @missing_version = '99999999'
     @missing_file = 'missing-file.jar'
     @latest_version = '1136'
-    end
+  end
 
   it 'installs the latest version of a resource' do
     provider = Bukin::Jenkins.new(@url)

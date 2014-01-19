@@ -8,6 +8,7 @@ describe Bukin::Lockfile do
     FakeFS.activate!
     @path = File.join(Dir.pwd, Bukin::Lockfile::FILE_NAME)
   end
+
   before(:each) {File.delete(@path) if File.exist?(@path)}
   after(:all) {FakeFS.deactivate!}
 
