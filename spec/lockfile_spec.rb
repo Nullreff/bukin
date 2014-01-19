@@ -4,17 +4,16 @@ require 'fakefs/safe'
 require 'yaml'
 
 describe Bukin::Lockfile do
-
-  before(:each) {File.delete(PATH) if File.exist?(PATH)}
-  after(:all) {FakeFS.deactivate!}
   before(:all) do
     FakeFS.activate!
-    PATH = File.join(Dir.pwd, Bukin::Lockfile::FILE_NAME)
+    @path = File.join(Dir.pwd, Bukin::Lockfile::FILE_NAME)
   end
+  before(:each) {File.delete(@path) if File.exist?(@path)}
+  after(:all) {FakeFS.deactivate!}
 
   it 'assignes a default path if none is provided' do
     lockfile = Bukin::Lockfile.new
-    lockfile.path.should == PATH
+    lockfile.path.should == @path
   end
 
   it 'assignes the path provided in the constructor' do
@@ -30,7 +29,7 @@ describe Bukin::Lockfile do
   it 'loads resources from an already existing lockfile' do
     resources = { 'resources' => 'value' }
 
-    File.open(PATH, 'w') {|file| file.write resources.to_yaml}
+    File.open(@path, 'w') {|file| file.write resources.to_yaml}
 
     lockfile = Bukin::Lockfile.new
     lockfile.resources.should == 'value'
@@ -46,7 +45,7 @@ describe Bukin::Lockfile do
     lockfile.save
 
     path = File.join
-    data = YAML::load_file(PATH)
+    data = YAML::load_file(@path)
     data.should == {
       'resources' => {
         'resource_name' => {
@@ -56,7 +55,7 @@ describe Bukin::Lockfile do
       }
     }
 
-    File.delete(PATH)
+    File.delete(@path)
     lockfile = Bukin::Lockfile.new
     lockfile.resources.should == {}
   end
