@@ -14,18 +14,16 @@ describe Bukin::Bukget, :vcr do
 
   it 'installs the latest version of a resource' do
     provider = Bukin::Bukget.new
-    resource = provider.find(name: @name)
+    version, download = provider.find(name: @name)
 
-    resource.name.should == @name
-    resource.version.should == @latest_version
+    version.should == @latest_version
   end
 
   it 'installs a specific version of a resource' do
     provider = Bukin::Bukget.new
-    resource = provider.find(name: @name, version: @version)
+    version, download = provider.find(name: @name, version: @version)
 
-    resource.name.should == @name
-    resource.version.should == @version
+    version.should == @version
   end
 
   it 'returns an error when asked for a resource that doese not exist' do
@@ -51,8 +49,8 @@ describe Bukin::Bukget, :vcr do
 
   it 'chooses the version with a .jar file when there are multiple versions' do
     provider = Bukin::Bukget.new
-    resource = provider.find(name: @name, version: @version)
+    version, download = provider.find(name: @name, version: @version)
 
-    resource.download.should == @download
+    download.should == @download
   end
 end

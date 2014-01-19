@@ -7,30 +7,28 @@ describe Bukin::Jenkins, :vcr do
     # Sorry md_5, but I'm using you for my integration tests
     @url = 'http://ci.md-5.net'
     @name = 'spigot'
-    @version = '1000'
+    @version = 'build-1000'
     @download = 'http://ci.md-5.net/job/spigot/1000/artifact/Spigot-Server/'\
                 'target/spigot-1.6.1-R0.1-SNAPSHOT.jar'
     @missing_name = 'missing-name'
-    @missing_version = '99999999'
+    @missing_version = 'build-99999999'
     @missing_file = 'missing-file.jar'
-    @latest_version = '1136'
+    @latest_version = 'build-1136'
   end
 
   it 'installs the latest version of a resource' do
     provider = Bukin::Jenkins.new(@url)
-    resource = provider.find(name: @name)
+    version, download = provider.find(name: @name)
 
-    resource.name.should == @name
-    resource.version.should == @latest_version
+    version.should == @latest_version
   end
 
   it 'installs a specific version of a resource' do
     provider = Bukin::Jenkins.new(@url)
-    resource = provider.find(name: @name, version: @version)
+    version, download = provider.find(name: @name, version: @version)
 
-    resource.name.should == @name
-    resource.version.should == @version
-    resource.download.should == @download
+    version.should == @version
+    download.should == @download
   end
 
   it 'returns an error when asked for a resource that doese not exist' do
@@ -56,8 +54,8 @@ describe Bukin::Jenkins, :vcr do
 
   it 'chooses the first file when there are multiple files' do
     provider = Bukin::Jenkins.new(@url)
-    resource = provider.find(name: @name, version: @version)
+    version, download = provider.find(name: @name, version: @version)
 
-    resource.download.should == @download
+    download.should == @download
   end
 end

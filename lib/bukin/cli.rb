@@ -43,27 +43,18 @@ module Bukin
       downloads = {}
       final_resources = []
 
-      raw_resources.each do |data|
-        name, provider = prepare(data)
-
-        unless provider.is_a?(Download)
-          # If the provider is set, we add it to the list of datas that
-          # require information to be downloaded from a server before they can
-          # be downloaded themselves
-          url = data[name]
-          downloads[url] ||= []
-          downloads[url] << data
-        else
-          # Otherwise we push it to the final list
-          final_datas << data
+      raw_resources.group_by {|data| get_provider(data)}.each do |name, datas|
+        datas.group_by {|data| data[name]}.each do |url, data|
+          downloads[PROVIDERS[name].new(url)] = data
         end
       end
 
       downloads.each do |provider, datas|
-        section "Fetching information from #{url}" do
+        fetching provider do
           datas.each do |data|
             begin
-              final_resources << provider.find_resource(data)
+              version, download = provider.find(data)
+              final_resources << Resource.new(data, version, download)
             rescue OpenURI::HTTPError => ex
               raise Bukin::BukinError,
                 "There was an error fetching information about "\
@@ -81,7 +72,7 @@ module Bukin
       installer = Bukin::Installer.new(Dir.pwd, true)
 
       resources.each do |resource|
-        downloading resource[:name], resource[:version] do
+        downloading resource.name, resource.version do
           begin
             installer.install(resource)
           rescue OpenURI::HTTPError => ex
@@ -108,18 +99,17 @@ module Bukin
       plugin: :bukget
     }
 
-    def prepare(data)
-      name, provider = PROVIDERS.find {|n, p| data[n]}
+    def get_provider(data)
+      name = PROVIDERS.keys.find {|n| data[n]}
 
       # If this resource doesn't have a provider, we assign a default
       unless name
         name = DEFAULTS[data[:type]]
         raise MissingProviderError.new(data) unless name
-        provider = PROVIDERS[name]
-        data[name] = provider::URL
+        data[name] = PROVIDERS[name]::URL
       end
 
-      return name, provider
+      name
     end
 
     def section(message)
@@ -136,6 +126,14 @@ module Bukin
       msg = "Downloading #{name}"
       msg << " (#{version})" if version
       section(msg, &block)
+    end
+
+    def fetching(provider, &block)
+      if provider.is_a?(Download)
+        yield
+      else
+        section("Fetching information from #{provider.url}", &block)
+      end
     end
   end
 end

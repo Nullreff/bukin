@@ -9,23 +9,18 @@ module Bukin
       @lockfile = Bukin::Lockfile.new if use_lockfile
     end
 
-    def install(data)
-      path = PATHS[data[:type]]
+    def install(resource)
+      path = PATHS[resource.type]
       file_names = []
-      dl_data, dl_name = download_file(data[:download])
+      dl_data, dl_name = download_file(resource.download)
 
       if File.extname(dl_name) == '.zip'
-        match = self.get_match(data[:extract])
+        match = self.get_match(resource[:extract])
         file_names = extract_files(dl_data, path, match)
-        raise Bukin::InstallError, "The resource #{data[:name]} (#{data[:version]}) has no jar files in it's download (zip file)." if file_names.empty?
+        raise Bukin::InstallError, "The resource #{resource.name} (#{resources.version}) has no jar files in it's download (zip file)." if file_names.empty?
       else
-        self.save_download(dl_data, dl_name, path)
+        save_download(dl_data, dl_name, path)
         file_names << dl_name
-      end
-
-      if @lockfile
-        data[:files] = file_names.map {|file_name| File.join(path, file_name)}
-        @lockfile.add(data)
       end
     end
 

@@ -7,6 +7,8 @@ module Bukin
   # BukGet api
   # Docs: http://bukget.org/pages/docs/API3.html
   class Bukget
+    attr_reader :url, :server
+
     VERSION = 'release'
     URL = 'http://api.bukget.org'
     SERVER = 'bukkit'
@@ -50,7 +52,7 @@ module Bukin
       version_data = versions.find {|data| jar_filename(data)} || versions.first
       raise NoDownloadError.new(name, version) unless version_data
 
-      Resource.new(name, version_data['version'], version_data['download'])
+      return version_data['version'], version_data['download']
     end
 
   private

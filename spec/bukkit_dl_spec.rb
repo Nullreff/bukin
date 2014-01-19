@@ -15,18 +15,16 @@ describe Bukin::BukkitDl, :vcr do
 
   it 'installs the latest version of a resource' do
     provider = Bukin::BukkitDl.new
-    resource = provider.find(name: @name)
+    version, download = provider.find(name: @name)
 
-    resource.name.should == @name
-    resource.version.should == @latest_version
+    version.should == @latest_version
   end
 
   it 'installs a specific version of a resource' do
     provider = Bukin::BukkitDl.new
-    resource = provider.find(name: @name, version: @version)
+    version, download = provider.find(name: @name, version: @version)
 
-    resource.name.should == @name
-    resource.version.should == @version
+    version.should == @version
   end
 
   it 'returns an error when asked for a resource that doese not exist' do
@@ -45,8 +43,8 @@ describe Bukin::BukkitDl, :vcr do
 
   it 'chooses the first file when there are multiple files' do
     provider = Bukin::BukkitDl.new
-    resource = provider.find(name: @name, version: @version)
+    version, download = provider.find(name: @name, version: @version)
 
-    resource.download.should == @download
+    download.should == @download
   end
 end

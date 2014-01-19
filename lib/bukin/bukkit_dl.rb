@@ -5,6 +5,8 @@ module Bukin
   # Bukkit download api
   # Docs: http://dl.bukkit.org/about/
   class BukkitDl
+    attr_reader :url
+
     VERSION = 'latest-rb'
     URL = 'http://dl.bukkit.org'
     GOOD_VERSIONS = "'latest', 'latest-rb', 'latest-beta', 'latest-dev', "\
@@ -30,7 +32,7 @@ module Bukin
 
       download = @url + info['file']['url']
 
-      Resource.new(name, "build-#{info['build_number']}", download)
+      return "build-#{info['build_number']}", download
     end
 
     def correct_version_format?(version)

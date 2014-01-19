@@ -5,8 +5,10 @@ require 'bukin/file_match'
 module Bukin
   # Api for downloading from jenkins
   class Jenkins
+    attr_reader :url
+
     VERSION = 'lastSuccessfulBuild'
-    GOOD_VERSIONS = "'125' or '#{VERSION}'"
+    GOOD_VERSIONS = "'build-125'"
 
     def initialize(url)
       @url = url
@@ -14,14 +16,18 @@ module Bukin
 
     def find(data)
       name = data[:name]
-      version = data[:version] || VERSION
+      version = data[:version]
       match = data[:file] ? FileMatch.new(data[:file]) : FileMatch.any
 
-      unless correct_version_format?(version)
+      if version.nil? || version == VERSION
+        build = VERSION
+      elsif correct_version_format?(version)
+        build = version[/^build-([0-9]+)$/, 1] 
+      else 
         raise VersionError.new(name, version, GOOD_VERSIONS)
       end
 
-      base_path = "#{@url}/job/#{CGI.escape(name)}/#{CGI.escape(version)}"
+      base_path = "#{@url}/job/#{CGI.escape(name)}/#{CGI.escape(build)}"
 
       info = Bukin.try_get_json("#{base_path}/api/json")
       raise NoDownloadError.new(name, version) unless info 
@@ -30,12 +36,12 @@ module Bukin
       raise NoDownloadError.new(name, version) unless download_info
 
       download = "#{base_path}/artifact/#{download_info['relativePath']}"
-      Resource.new(name, info['number'].to_s, download)
+      return "build-#{info['number']}", download
     end
 
   private
     def correct_version_format?(version)
-      version == VERSION || /^[0-9]+$/.match(version)
+      version == VERSION || /^build-[0-9]+$/.match(version)
     end
   end
 end
