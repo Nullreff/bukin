@@ -21,6 +21,14 @@ module Bukin
       add_resource name, :plugin, args
     end
 
+  def to_s
+    @reources.map do |resource|
+      result = "#{resource[:name]}"
+      result << " (#{resource[:version]})" if resource[:version]
+      result
+    end.join('\n')
+  end
+
   private
     def add_resource(name, type, args)
       raise(
