@@ -21,6 +21,13 @@ module Bukin
     end
   end
 
+  class MissingProviderError < BukinError
+    def initialize(resource)
+      super("The #{resource[:type].to_s} '#{resource[:name]}' "\
+            "is missing a provider")
+    end
+  end
+
   def self.get_json(url)
     JSON.parse(open(url).read)
   end

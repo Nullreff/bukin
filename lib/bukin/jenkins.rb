@@ -5,16 +5,17 @@ require 'bukin/file_match'
 module Bukin
   # Api for downloading from jenkins
   class Jenkins
-    LATEST = 'lastSuccessfulBuild'
-    GOOD_VERSIONS = "'125' or '#{LATEST}'"
+    VERSION = 'lastSuccessfulBuild'
+    GOOD_VERSIONS = "'125' or '#{VERSION}'"
 
     def initialize(url)
       @url = url
     end
 
-    def find_resource(name, version = nil, match = nil)
-      version ||= LATEST
-      match = match ? FileMatch.new(match) : FileMatch.any
+    def find(data)
+      name = data[:name]
+      version = data[:version] || VERSION
+      match = data[:file] ? FileMatch.new(data[:file]) : FileMatch.any
 
       unless correct_version_format?(version)
         raise VersionError.new(name, version, GOOD_VERSIONS)
@@ -34,7 +35,7 @@ module Bukin
 
   private
     def correct_version_format?(version)
-      version == LATEST || /^[0-9]+$/.match(version)
+      version == VERSION || /^[0-9]+$/.match(version)
     end
   end
 end

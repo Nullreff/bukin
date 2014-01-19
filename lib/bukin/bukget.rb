@@ -16,10 +16,10 @@ module Bukin
       @server = server
     end
 
-    def find_resource(name, version = nil, match = nil)
-      raise 'You must provide a name when installing from bukget' if name.nil?
-      version ||= VERSION
-      match = match ? FileMatch.new(match) : FileMatch.any
+    def find(data)
+      name = data[:name]
+      version = data[:version] || VERSION
+      match = data[:file] ? FileMatch.new(data[:file]) : FileMatch.any
 
       info = Bukin.try_get_json("#{@url}/3/plugins/#{CGI.escape(@server)}/"\
                             "#{CGI.escape(name)}/#{CGI.escape(version)}")

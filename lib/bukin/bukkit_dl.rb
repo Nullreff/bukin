@@ -14,8 +14,9 @@ module Bukin
       @url = url
     end
 
-    def find_resource(name, version = nil)
-      version ||= VERSION
+    def find(data)
+      name = data[:name]
+      version = data[:version] || VERSION
 
       unless correct_version_format?(version)
         raise VersionError.new(name, version, GOOD_VERSIONS)

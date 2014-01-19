@@ -18,7 +18,7 @@ describe Bukin::Jenkins, :vcr do
 
   it 'installs the latest version of a resource' do
     provider = Bukin::Jenkins.new(@url)
-    resource = provider.find_resource(@name)
+    resource = provider.find(name: @name)
 
     resource.name.should == @name
     resource.version.should == @latest_version
@@ -26,7 +26,7 @@ describe Bukin::Jenkins, :vcr do
 
   it 'installs a specific version of a resource' do
     provider = Bukin::Jenkins.new(@url)
-    resource = provider.find_resource(@name, @version)
+    resource = provider.find(name: @name, version: @version)
 
     resource.name.should == @name
     resource.version.should == @version
@@ -36,27 +36,27 @@ describe Bukin::Jenkins, :vcr do
   it 'returns an error when asked for a resource that doese not exist' do
     provider = Bukin::Jenkins.new(@url)
     expect do
-      provider.find_resource(@missing_name)
+      provider.find(name: @missing_name)
     end.to raise_error(Bukin::NoDownloadError)
   end
 
   it 'returns an error when asked for a version that does not exist' do
     provider = Bukin::Jenkins.new(@url)
     expect do
-      provider.find_resource(@name, @missing_version)
+      provider.find(name: @name, version: @missing_version)
     end.to raise_error(Bukin::NoDownloadError)
   end
 
   it 'returns an error when asked for a file that does not exist' do
     provider = Bukin::Jenkins.new(@url)
     expect do
-      provider.find_resource(@name, @version, @missing_file)
+      provider.find(name: @name, version: @version, file: @missing_file)
     end.to raise_error(Bukin::NoDownloadError)
   end
 
   it 'chooses the first file when there are multiple files' do
     provider = Bukin::Jenkins.new(@url)
-    resource = provider.find_resource(@name, @version)
+    resource = provider.find(name: @name, version: @version)
 
     resource.download.should == @download
   end
