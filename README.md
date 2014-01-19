@@ -1,7 +1,7 @@
 Bukin
 =====
 
-Plugin and server installer for Minecraft similar to [Bundler](http://gembundler.com/).  Still a work in progress...
+Plugin and server installer for Minecraft similar to [Bundler](http://gembundler.com/).
 
 [![Build Status](https://travis-ci.org/Nullreff/bukin.png)](https://travis-ci.org/Nullreff/bukin)
 [![Dependency Status](https://gemnasium.com/Nullreff/bukin.png)](https://gemnasium.com/Nullreff/bukin)
@@ -11,11 +11,50 @@ Plugin and server installer for Minecraft similar to [Bundler](http://gembundler
 Installation
 ------------
 
-Install [rubygems](http://docs.rubygems.org/read/chapter/3) then:
+Bukin requires Ruby 1.9 or greater.
 
-    gem install bukin
+### Debian/Ubuntu
 
+    apt-get install ruby
+    gem install bukin --no-ri --no-rdoc
 
+### CentOS/Fedora
+
+CentOS 6.x comes with Ruby 1.8 which is incompatable with Bukin.  You'll need to [download and install](http://www.ruby-lang.org/en/downloads/) a newer version.  After that just run
+
+    gem install bukin --no-ri --no-rdoc
+
+Features
+--------
+
+Bukin is still a work in progress and is far from feature complete.  Currently it supports:
+
+* Resource installation from
+  * [dev.bukkit.org](http://dev.bukkit.org/)
+  * [dl.bukkit.org](http://dl.bukkit.org/)
+  * [Jenkins](http://jenkins-ci.org/)
+  * Direct download
+* Versioning
+  * Specific versions
+  * Categories (ex: latest test build)
+  * Auto selection if none specified
+* Automatic or user specified filtering of downloaded files
+* Automatic or user specified extraction of zip files
+
+Eventually, I'd like to add some of the following:
+
+* A lockfile that tracks exactly what versions are installed
+* Automatic detection of already installed plugins
+* Dependency tracking and resolution
+* More complex version selectors
+* Modpack support
+* Resource installation from git
+* Installation groups
+* Top level 'source' directives
+* More commands for viewing information and updating plugins
+
+If you have features you'd like to see, pull request are welcome.
+    
 Usage
 -----
 
@@ -24,7 +63,7 @@ Bukin works by reading a list of dependencies from a `Bukfile`.  The most basic 
     echo "server 'craftbukkit'" > Bukfile
     bukin install
 
-Currently only [Craftbukkit](http://bukkit.org/) is available as a server and [BukkitDev](http://dev.bukkit.org/) is the only plugin api supported.  Specify a server using the `server` keyword and a plugin using the `plugin` keyword.
+Specify a server using the `server` keyword and a plugin using the `plugin` keyword.
 
     server 'craftbukkit'
     plugin 'worldedit'
