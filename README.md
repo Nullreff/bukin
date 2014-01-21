@@ -109,4 +109,4 @@ else
 end
 ```
 
-Just make sure that you read and trust it any Bukfile you download before running `bukin install`.
+Just make sure that you read and trust any Bukfile you download before running `bukin install`.
