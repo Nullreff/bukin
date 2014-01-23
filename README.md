@@ -40,6 +40,7 @@ Bukin is still a work in progress and is far from feature complete.  Currently i
   * Auto selection if none specified
 * Automatic or user specified filtering of downloaded files
 * Automatic or user specified extraction of zip files
+* Installation groups
 
 Eventually, I'd like to add some of the following:
 
@@ -49,7 +50,6 @@ Eventually, I'd like to add some of the following:
 * More complex version selectors
 * Modpack support
 * Resource installation from git
-* Installation groups
 * Top level 'source' directives
 * More commands for viewing information and updating plugins
 
@@ -71,6 +71,35 @@ Specify a server using the `server` keyword and a plugin using the `plugin` keyw
 server 'craftbukkit'
 plugin 'worldedit'
 plugin 'worldguard'
+```
+
+You can specify groups that resources should be placed in.  This allows you to only install specific plugins depending on your environment or server setup.
+
+```ruby
+# Will not be installed if the group 'test' is excluded
+plugin 'worldedit', group: :test
+
+group :test do
+  plugin 'worldguard'
+  plugin 'worldedit'
+end
+
+# Will not be installed if both the groups 'test' and 'development' are excluded
+plugin 'worldedit', group: [:test, :development]
+
+group :test, :development do
+  plugin 'worldguard'
+  plugin 'worldedit'
+end
+
+# Will be installed regardless of what groups are specified
+plugin 'worldguard'
+```
+
+When installing, resources that exist only in excluded groups will not be installed.
+
+```bash
+bukin install --without development test
 ```
 
 You can specify specific versions of a plugin or server to install.  Craftbukkit uses its own [special version naming](http://dl.bukkit.org/about/) (artifact slugs).

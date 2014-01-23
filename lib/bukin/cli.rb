@@ -13,8 +13,10 @@ module Bukin
     desc 'install [NAMES]', "Download and install the resources specified in a "\
                             "Bukfile.\nOptionally specify the names of specific "\
                             "plugins to install."
+    option :without, type: :array, default: [], desc: 'Groups to exclude when installing'
     def install(*names) # Parse in the Bukfile
-      raw_resources = parse_resources(names)
+      without = options[:without].map(&:to_sym)
+      raw_resources = parse_resources(names, without)
 
       # Get all the informatin needed to install
       resources = prepare_resources(raw_resources)
@@ -29,11 +31,18 @@ module Bukin
     end
 
   private
-    def parse_resources(names)
+    def parse_resources(names, without)
       resources = section('Parsing Bukfile') {Bukin::Bukfile.new.resources}
 
       # If name are specified, only install resources with those names
       resources.select! {|resource| names.include?(resource[:name])} if names.any?
+
+      # Skip any resources that only exist in excluded groups
+      if without.any?
+        resources.select! do |resource|
+          resource[:group].empty? || (resource[:group] - without).any?
+        end
+      end
       raise Bukin::BukinError, "Nothing to install" if resources.empty?
 
       resources
