@@ -4,7 +4,15 @@ require 'socket'
 
 module Bukin
   class BukinError < StandardError; end
-  class BukfileError < BukinError; end
+  class BukfileError < BukinError
+    def self.not_symbol(group)
+      BukfileError.new("The group name '#{group}' must be a Symbol")
+    end
+
+    def self.nested_groups
+      BukfileError.new("Nesing 'group' statements is not supported")
+    end
+  end
   class InstallError < BukinError; end
 
   class VersionError < BukinError

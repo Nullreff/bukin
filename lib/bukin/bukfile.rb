@@ -6,6 +6,8 @@ module Bukin
     def initialize(path = nil, &block)
       @resources = []
       @path = path || File.join(Dir.pwd, FILE_NAME)
+      @groups = []
+
       if block
        instance_eval(&block)
       else
@@ -19,6 +21,17 @@ module Bukin
 
     def plugin(name, *args)
       add_resource name, :plugin, args
+    end
+
+    def group(*groups)
+      raise BukfileError.nested_groups unless @groups.empty?
+      groups.each do |group|
+        raise BukfileError.not_symbol(group) unless group.is_a?(Symbol)
+      end
+
+      @groups = groups
+      yield
+      @groups = []
     end
 
   def to_s
@@ -46,12 +59,27 @@ module Bukin
         :version => version
       }.merge(options)
 
+      resource[:group] = build_groups(resource[:group])
+
       @resources << resource
     end
 
     def resource_exists?(name, type)
       @resources.any? do |resource|
         resource[:name] == name && resource[:type] == type
+      end
+    end
+
+    def build_groups(group)
+      case group
+      when nil
+        @groups.uniq
+      when Symbol
+        [group] | @groups
+      when Array
+        group | @groups
+      else
+        raise BukfileError.not_symbol(group)
       end
     end
   end

@@ -3,7 +3,6 @@ require 'bukin'
 
 describe Bukin::Bukfile do
   [:server, :plugin].each do |type|
-
     it "adds a #{type} by method" do
       bukfile = Bukin::Bukfile.new{}
       bukfile.resources.size.should == 0
@@ -87,5 +86,129 @@ describe Bukin::Bukfile do
 
     bukfile.resources.size.should == 0
     bukfile.resources.find{|resource| resource[:name] == 'missing_plugin'}.should be_nil
+  end
+
+  it 'attaches a single group to a resource' do
+    bukfile = Bukin::Bukfile.new do
+      plugin 'test', group: :test
+    end
+
+    bukfile.resources.first[:group].should == [:test]
+  end
+
+  it 'attaches multiple groups to a resource' do
+    bukfile = Bukin::Bukfile.new do
+      plugin 'test', group: [:test, :development]
+    end
+
+    bukfile.resources.first[:group].should == [:test, :development]
+  end
+
+  it 'attaches a single group to multiple resources' do
+    bukfile = Bukin::Bukfile.new do
+      group :test do
+        plugin 'test1'
+        plugin 'test2'
+      end
+    end
+
+    bukfile.resources[0][:group].should == [:test]
+    bukfile.resources[1][:group].should == [:test]
+  end
+
+  it 'attaches multiple groups to multiple resources' do
+    bukfile = Bukin::Bukfile.new do
+      group :test, :development do
+        plugin 'test1'
+        plugin 'test2'
+      end
+    end
+
+    bukfile.resources[0][:group].should == [:test, :development]
+    bukfile.resources[1][:group].should == [:test, :development]
+  end
+
+  it 'attaches groups to multiple resources' do
+    bukfile = Bukin::Bukfile.new do
+      group :test do
+        plugin 'test1', group: :development
+        plugin 'test2'
+      end
+    end
+
+    bukfile.resources[0][:group].should =~ [:test, :development]
+    bukfile.resources[1][:group].should == [:test]
+  end
+
+  it 'combines duplicate groups' do
+    bukfile = Bukin::Bukfile.new do
+      group :test do
+        plugin 'test1', group: [:development, :test]
+        plugin 'test2', group: :test
+      end
+    end
+
+    bukfile.resources[0][:group].should =~ [:test, :development]
+    bukfile.resources[1][:group].should == [:test]
+  end
+
+  it 'combines duplicate method groups' do
+    bukfile = Bukin::Bukfile.new do
+      group :test, :test do
+        plugin 'test'
+      end
+    end
+
+    bukfile.resources.first[:group].should == [:test]
+  end
+
+  it 'combines duplicate resource groups' do
+    bukfile = Bukin::Bukfile.new do
+      plugin 'test', group: [:test, :test]
+    end
+
+    bukfile.resources.first[:group].should == [:test]
+  end
+
+  it 'only adds groups inside a block' do
+    bukfile = Bukin::Bukfile.new do
+      group :development do
+        plugin 'test1'
+      end
+      plugin 'test2'
+    end
+
+    bukfile.resources[0][:group].should == [:development]
+    bukfile.resources[1][:group].should == []
+  end
+
+  it 'throws an error when groups are nested' do
+    expect do
+      Bukin::Bukfile.new do
+        group :test do
+          group :development do
+            plugin 'test'
+          end
+        end
+      end
+    end.to raise_error(Bukin::BukfileError)
+  end
+
+  it 'throws an error when group is not a symbol' do
+    expect do
+      Bukin::Bukfile.new do
+        group 'test' do
+          plugin 'test'
+        end
+      end
+    end.to raise_error(Bukin::BukfileError)
+  end
+
+  it 'throws an error when resource group is not a symbol' do
+    expect do
+      Bukin::Bukfile.new do
+        plugin 'test', group: 'test'
+      end
+    end.to raise_error(Bukin::BukfileError)
   end
 end
