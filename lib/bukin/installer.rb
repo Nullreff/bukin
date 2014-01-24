@@ -1,4 +1,3 @@
-require 'bukin/lockfile'
 require 'bukin/state'
 require 'zip'
 
@@ -6,8 +5,7 @@ module Bukin
   class Installer
     PATHS = { :server => '.', :plugin => 'plugins' }
 
-    def initialize(path, use_lockfile = false)
-      @lockfile = Lockfile.new if use_lockfile
+    def initialize(path)
       @state = State.new(path)
     end
 

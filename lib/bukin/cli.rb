@@ -96,7 +96,7 @@ module Bukin
     end
 
     def install_resources(resources)
-      installer = Installer.new(Dir.pwd, true)
+      installer = Installer.new(Dir.pwd)
       state = State.new(Dir.pwd)
 
       # Install new resources
