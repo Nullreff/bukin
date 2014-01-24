@@ -1,4 +1,5 @@
 require 'bukin/lockfile'
+require 'bukin/state'
 require 'zip'
 
 module Bukin
@@ -7,21 +8,24 @@ module Bukin
 
     def initialize(path, use_lockfile = false)
       @lockfile = Bukin::Lockfile.new if use_lockfile
+      @state = State.new(path)
     end
 
     def install(resource)
       path = PATHS[resource.type]
-      file_names = []
+      files = []
       dl_data, dl_name = download_file(resource.download)
 
       if File.extname(dl_name) == '.zip'
         match = self.get_match(resource[:extract])
-        file_names = extract_files(dl_data, path, match)
-        raise Bukin::InstallError, "The resource #{resource.name} (#{resources.version}) has no jar files in it's download (zip file)." if file_names.empty?
+        files = extract_files(dl_data, path, match)
+        raise Bukin::InstallError, "The resource #{resource.name} (#{resources.version}) has no jar files in it's download (zip file)." if files.empty?
       else
-        save_download(dl_data, dl_name, path)
-        file_names << dl_name
+        files = save_download(dl_data, dl_name, path)
       end
+
+      @state.files[resource.name, resource.version] = files
+      @state.save
     end
 
     def extract_files(file_data, path, match)
@@ -34,8 +38,9 @@ module Bukin
         Zip::File.open(tempfile.path) do |zipfile|
           files = zipfile.find_all {|file| file.name =~ match}
           files.each do |file|
-            file.extract(File.join(path, file.name)) { true }
-            file_names << file.name
+            full_path = File.join(path, file.name)
+            file.extract(full_path) { true }
+            file_names << full_path
           end
         end
       ensure
@@ -47,9 +52,11 @@ module Bukin
 
     def save_download(data, name, path)
       FileUtils.mkdir_p(path)
-      open("#{path}/#{name}", "wb") do |file|
+      full_path = File.join(path, name)
+      open(full_path, 'wb') do |file|
         file.print data
       end
+      [full_path]
     end
 
     def download_file(url, content_disposition = false)

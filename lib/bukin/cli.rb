@@ -7,6 +7,7 @@ require 'bukin/bukget'
 require 'bukin/bukkit_dl'
 require 'bukin/jenkins'
 require 'bukin/download'
+require 'bukin/state'
 
 module Bukin
   class CLI < Thor
@@ -59,7 +60,7 @@ module Bukin
       end
 
       downloads.each do |provider, datas|
-        fetching provider do
+        fetching_section provider do
           datas.each do |data|
             begin
               version, download = provider.find(data)
@@ -78,10 +79,18 @@ module Bukin
     end
 
     def install_resources(resources)
-      installer = Bukin::Installer.new(Dir.pwd, true)
+      installer = Installer.new(Dir.pwd, true)
+      state = State.new(Dir.pwd)
 
       resources.each do |resource|
-        downloading resource.name, resource.version do
+        if state.files.installed?(resource.name, resource.version)
+          using_section(resource.name, resource.version)
+          next
+        else
+          state.files.delete(resource.name)
+        end
+
+        installing_section resource.name, resource.version do
           begin
             installer.install(resource)
           rescue OpenURI::HTTPError => ex
@@ -131,13 +140,19 @@ module Bukin
       raise ex
     end
 
-    def downloading(name, version, &block)
-      msg = "Downloading #{name}"
+    def installing_section(name, version, &block)
+      msg = "Installing #{name}"
       msg << " (#{version})" if version
       section(msg, &block)
     end
 
-    def fetching(provider, &block)
+    def using_section(name, version)
+      msg = "Using #{name}"
+      msg << " (#{version})" if version
+      section(msg) {}
+    end
+
+    def fetching_section(provider, &block)
       if provider.is_a?(Download)
         yield
       else

@@ -40,12 +40,12 @@ Bukin is still a work in progress and is far from feature complete.  Currently i
   * Auto selection if none specified
 * Automatic or user specified filtering of downloaded files
 * Automatic or user specified extraction of zip files
+* Automatic detection of already installed plugins
 * Installation groups
 
 Eventually, I'd like to add some of the following:
 
 * A lockfile that tracks exactly what versions are installed
-* Automatic detection of already installed plugins
 * Dependency tracking and resolution
 * More complex version selectors
 * Modpack support
