@@ -7,7 +7,7 @@ module Bukin
     attr_reader :path, :files
 
     def initialize(path = nil)
-      path ||= Dir.pwd
+      path ||= '.'
       @path = File.join(path, '.bukin')
       create_dir
       @files = FileState.new(File.join(@path, 'files.yml'), path)
