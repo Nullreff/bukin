@@ -7,7 +7,7 @@ module Bukin
     PATHS = { :server => '.', :plugin => 'plugins' }
 
     def initialize(path, use_lockfile = false)
-      @lockfile = Bukin::Lockfile.new if use_lockfile
+      @lockfile = Lockfile.new if use_lockfile
       @state = State.new(path)
     end
 
@@ -19,7 +19,7 @@ module Bukin
       if File.extname(dl_name) == '.zip'
         match = self.get_match(resource[:extract])
         files = extract_files(dl_data, path, match)
-        raise Bukin::InstallError, "The resource #{resource.name} (#{resources.version}) has no jar files in it's download (zip file)." if files.empty?
+        raise InstallError, "The resource #{resource.name} (#{resources.version}) has no jar files in it's download (zip file)." if files.empty?
       else
         files = save_download(dl_data, dl_name, path)
       end
@@ -83,7 +83,7 @@ module Bukin
       when nil
         /\.jar$/
       else
-        raise Bukin::InstallError, "The extract option #{match} is not valid.  Please use a String, Regexp or :all"
+        raise InstallError, "The extract option #{match} is not valid.  Please use a String, Regexp or :all"
       end
     end
 

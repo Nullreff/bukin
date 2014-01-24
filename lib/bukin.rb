@@ -48,7 +48,7 @@ module Bukin
 
   def self.with_friendly_errors
     yield
-  rescue Bukin::BukinError => error
+  rescue BukinError => error
     abort error.message
   rescue SocketError => error
     abort "#{error.message}\nCheck that you have a stable connection and the service is online"

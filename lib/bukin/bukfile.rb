@@ -45,7 +45,7 @@ module Bukin
   private
     def add_resource(name, type, args)
       raise(
-        Bukin::BukinError,
+        BukinError,
         "Error: The #{type} '#{name}' is declared "\
         "more than once in your #{FILE_NAME}"
       ) if resource_exists?(name, type)

@@ -50,7 +50,7 @@ module Bukin
 
   private
     def parse_resources(names, without)
-      resources = section('Parsing Bukfile') {Bukin::Bukfile.new.resources}
+      resources = section('Parsing Bukfile') {Bukfile.new.resources}
 
       # If name are specified, only install resources with those names
       resources.select! {|resource| names.include?(resource[:name])} if names.any?
@@ -61,7 +61,7 @@ module Bukin
           resource[:group].empty? || (resource[:group] - without).any?
         end
       end
-      raise Bukin::BukinError, "Nothing to install" if resources.empty?
+      raise BukinError, "Nothing to install" if resources.empty?
 
       resources
     end
@@ -83,7 +83,7 @@ module Bukin
               version, download = provider.find(data)
               final_resources << Resource.new(data, version, download)
             rescue OpenURI::HTTPError => ex
-              raise Bukin::BukinError,
+              raise BukinError,
                 "There was an error fetching information about "\
                 "'#{data[:name]} (#{data[:version]})'.\n"\
                 "#{ex.message}"
@@ -113,7 +113,7 @@ module Bukin
             installer.install(resource)
           rescue OpenURI::HTTPError => ex
             raise(
-              Bukin::BukinError,
+              BukinError,
               "There was an error installing "\
               "'#{resource[:name]} (#{resource[:version]})'.\n"\
               "#{ex.message}"
