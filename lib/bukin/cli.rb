@@ -99,6 +99,7 @@ module Bukin
       installer = Installer.new(Dir.pwd, true)
       state = State.new(Dir.pwd)
 
+      # Install new resources
       resources.each do |resource|
         if state.files.installed?(resource.name, resource.version)
           using_section(resource.name, resource.version)
@@ -119,6 +120,12 @@ module Bukin
             )
           end
         end
+      end
+
+      # Remove old resources
+      names = resources.map(&:name)
+      state.files.names.each do |name|
+        state.files.delete(name) unless names.include?(name)
       end
     end
 

@@ -67,5 +67,6 @@ describe Bukin::State do
     state.files.delete('worldguard')
 
     File.exist?('plugins/WorldGuard.jar').should be_false
+    state.files['worldguard', '1.0.0'].should be_nil
   end
 end

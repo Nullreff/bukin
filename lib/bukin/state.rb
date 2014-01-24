@@ -59,9 +59,15 @@ module Bukin
     def delete(name)
       (self[name] || {}).each do |version, files|
         files.each do |file|
-          FileUtils.rm_r(file)
+          FileUtils.rm_r(file) if File.exist?(file)
         end
       end
+
+      @files.delete(name)
+    end
+
+    def names
+      @files.keys
     end
 
     def save
