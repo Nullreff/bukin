@@ -19,7 +19,7 @@ module Bukin
       without = options[:without].map(&:to_sym)
       raw_resources = parse_resources(names, without)
 
-      # Get all the informatin needed to install
+      # Get all the information needed to install
       resources = prepare_resources(raw_resources)
 
       # Download and install all resources
