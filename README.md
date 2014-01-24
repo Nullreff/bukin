@@ -61,7 +61,7 @@ Usage
 Bukin works by reading a list of dependencies from a `Bukfile`.  The most basic usage would be:
 
 ```bash
-echo "server 'craftbukkit'" > Bukfile
+bukin init
 bukin install
 ```
 

@@ -26,6 +26,23 @@ module Bukin
       install_resources(resources)
     end
 
+    desc 'init', "Creates a new Bukfile with craftbukkit as a server and adds"\
+                 "the .bukin directory to any existing .gitignore file."
+    def init
+      path = File.join(Dir.pwd, Bukfile::FILE_NAME)
+      if File.exist?(path)
+        say 'Bukfile already exists'
+      else
+        say 'Creating Bukfile'
+        File.open(path, 'w') {|file| file.write("server 'craftbukkit'")}
+      end
+
+      if File.exist?('.gitignore') && File.readlines('.gitignore').grep(/\.bukin/).empty?
+        say 'Writing .bukin to gitignore'
+        File.open('.gitignore', 'a') {|file| file.write('.bukin')}
+      end
+    end
+
     def help(*)
       shell.say "Bukin is a plugin and server package manager for Minecraft.\n"
       super
