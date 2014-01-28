@@ -19,14 +19,14 @@ Bukin requires Ruby 1.9 or greater.
 Usage
 -----
 
-Bukin works by reading a list of dependencies from a `Bukfile`.  The most basic usage would be:
+Bukin works by reading a list of dependencies from a *Bukfile*.  The most basic usage would be:
 
 ```bash
 bukin init
 bukin install
 ```
 
-Specify a server using the `server` keyword and a plugin using the `plugin` keyword.
+Running `bukin init` will create a file named *Bukfile* that lists 'craftbukkit' as the server to be installed.  Running `bukin install` will then download and install [Bukkit](http://dl.bukkit.org/).  You can make changes to what will be installed by editing the *Bukfile*.  Specify a server using the `server` keyword and a plugin using the `plugin` keyword.
 
 ```ruby
 server 'craftbukkit'
@@ -34,7 +34,15 @@ plugin 'worldedit'
 plugin 'worldguard'
 ```
 
-You can specify groups that resources should be placed in.  This allows you to only install specific plugins depending on your environment or server setup.
+You can specify specific versions of a plugin or server to install.  Craftbukkit uses its own [special version naming](http://dl.bukkit.org/about/) (artifact slugs).
+
+```ruby
+server 'craftbukkit', 'build-2754'
+plugin 'worldedit', '5.5.5'
+plugin 'worldguard', '5.7.3'
+```
+
+You can also specify groups that resources should be placed in.  This allows you to only install specific plugins depending on your environment or server setup.
 
 ```ruby
 # Will not be installed if the group 'test' is excluded
@@ -61,14 +69,6 @@ When installing, resources that exist only in excluded groups will not be instal
 
 ```bash
 bukin install --without development test
-```
-
-You can specify specific versions of a plugin or server to install.  Craftbukkit uses its own [special version naming](http://dl.bukkit.org/about/) (artifact slugs).
-
-```ruby
-server 'craftbukkit', 'build-2754'
-plugin 'worldedit', '5.5.5'
-plugin 'worldguard', '5.7.3'
 ```
 
 By default, bukin will try to download jar files from bukkit dev.  If only zip files are available, it will automatically extract all jar files from it.  If you want to specify what files are extracted from a zip file, use the `extract` option.  It takes a string or [ruby regular expression](http://ruby-doc.org/core-1.9.3/Regexp.html) used to match file names in the zip file.
