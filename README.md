@@ -13,17 +13,9 @@ Installation
 
 Bukin requires Ruby 1.9 or greater.
 
-### Debian/Ubuntu
-
     apt-get install ruby
-    gem install bukin --no-ri --no-rdoc
-
-### CentOS/RHEL
-
-CentOS 6.x comes with Ruby 1.8 which is incompatable with Bukin.  You'll need to [download and install](http://www.ruby-lang.org/en/downloads/) a newer version.  After that just run
-
-    gem install bukin --no-ri --no-rdoc
-
+    gem install bukin
+    
 Features
 --------
 
