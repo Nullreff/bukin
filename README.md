@@ -15,38 +15,7 @@ Bukin requires Ruby 1.9 or greater.
 
     apt-get install ruby
     gem install bukin
-    
-Features
---------
 
-Bukin is still a work in progress and is far from feature complete.  Currently it supports:
-
-* Resource installation from
-  * [dev.bukkit.org](http://dev.bukkit.org/)
-  * [dl.bukkit.org](http://dl.bukkit.org/)
-  * [Jenkins](http://jenkins-ci.org/)
-  * Direct download
-* Versioning
-  * Specific versions
-  * Categories (ex: latest test build)
-  * Auto selection if none specified
-* Automatic or user specified filtering of downloaded files
-* Automatic or user specified extraction of zip files
-* Automatic detection of already installed plugins
-* Installation groups
-
-Eventually, I'd like to add some of the following:
-
-* A lockfile that tracks exactly what versions are installed
-* Dependency tracking and resolution
-* More complex version selectors
-* Modpack support
-* Resource installation from git
-* Top level 'source' directives
-* More commands for viewing information and updating plugins
-
-If you have features you'd like to see, pull request are welcome.
-    
 Usage
 -----
 
@@ -131,3 +100,35 @@ end
 ```
 
 Just make sure that you read and trust any Bukfile you download before running `bukin install`.
+
+Features
+--------
+
+Bukin is still a work in progress and is far from feature complete.  Currently it supports:
+
+* Resource installation from
+  * [dev.bukkit.org](http://dev.bukkit.org/)
+  * [dl.bukkit.org](http://dl.bukkit.org/)
+  * [Jenkins](http://jenkins-ci.org/)
+  * Direct download
+* Versioning
+  * Specific versions
+  * Categories (ex: latest test build)
+  * Auto selection if none specified
+* Automatic or user specified filtering of downloaded files
+* Automatic or user specified extraction of zip files
+* Automatic detection of already installed plugins
+* Installation groups
+
+Eventually, I'd like to add some of the following:
+
+* A lockfile that tracks exactly what versions are installed
+* Dependency tracking and resolution
+* More complex version selectors
+* Modpack support
+* Resource installation from git
+* Top level 'source' directives
+* More commands for viewing information and updating plugins
+
+If you have features you'd like to see, pull request are welcome.
+
